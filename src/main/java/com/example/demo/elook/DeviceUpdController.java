@@ -21,6 +21,7 @@ public abstract class DeviceUpdController {
     private int cmd;
     private String PASS_STR = "OK1";
     private String FAIL_STR = "OK2";
+    private String PASS2_STR = "OK0";
 
     private final int DATA_START  = 0;
     private final int SN_LEN      = 9;
@@ -113,6 +114,39 @@ public abstract class DeviceUpdController {
         easyDevRepository.save(devstate);
     }
 
+    public void saveDevUplState(int devid,int state){
+        EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
+        EasyDevice devstate = new EasyDevice();
+        devstate.setDeviceDeviceId(devid);
+        devstate.setDeviceUplState(state);
+        easyDevRepository.save(devstate);
+    }
+
+    public void saveDevErrPic(int devid,int batlev,int state,String path){
+        EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
+        EasyDevice devstate = new EasyDevice();
+        devstate.setDeviceDeviceId(devid);
+        devstate.setDeviceDevStateSub(0);
+        devstate.setDeviceBetteryLev(batlev);
+        devstate.setDeviceDevState(state);
+        devstate.setDeviceDevUrlErrpic(path);
+        easyDevRepository.save(devstate);
+    }
+
+    public void saveDevFull(int devid,int batlev,int state,String path,int tmp_value,int led_type,int led_lev){
+        EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
+        EasyDevice devstate = new EasyDevice();
+        devstate.setDeviceDeviceId(devid);
+        devstate.setDeviceDevStateSub(0);
+        devstate.setDeviceBetteryLev(batlev);
+        devstate.setDeviceDevState(state);
+        devstate.setDeviceDevUrlPic(path);
+        devstate.setDeviceTmpValue(tmp_value);
+        devstate.setDeviceLedType(led_type);
+        devstate.setDeviceLedLevel(led_lev);
+        easyDevRepository.save(devstate);
+    }
+
     public void saveAccess(int devid,int value){
         EasyAccessRepository easyAccessRepository = (EasyAccessRepository) StartupEvent.getBean(EasyAccessRepository.class);
         EasyAccess easyAccess = new EasyAccess();
@@ -129,6 +163,16 @@ public abstract class DeviceUpdController {
         easyAccess.setAccessDeviceId(devid);
         easyAccess.setAccessValue(value);
         easyAccess.setAccessTime(time);
+        easyAccessRepository.save(easyAccess);
+    }
+
+    public void saveAccessUrl(int id,String url){
+        EasyAccessRepository easyAccessRepository = (EasyAccessRepository) StartupEvent.getBean(EasyAccessRepository.class);
+        EasyAccess easyAccess = new EasyAccess();
+        easyAccess.setAccessAutoId(id);
+        int time = (int)(System.currentTimeMillis()/1000);
+        easyAccess.setAccessTime(time);
+        easyAccess.setAccessNewUrl(url);
         easyAccessRepository.save(easyAccess);
     }
 
@@ -174,6 +218,18 @@ public abstract class DeviceUpdController {
             ret[i]=Byte.decode("0x"+substr);
         }
         return ret;
+    }
+
+    public int findTopAccessId(int sn){
+        int id = 0;
+        EasyAccessRepository easyAccessRepository = (EasyAccessRepository) StartupEvent.getBean(EasyAccessRepository.class);
+        List<EasyAccess> list = easyAccessRepository.findTop1ByAccessDeviceIdOrderByAccessTimeDesc(devid);
+        if(list.isEmpty()){
+
+        }else{
+            id =list.get(0).getAccessAutoId();
+        }
+        return id;
     }
 
     public int findTopAccessInt(int sn){
@@ -265,6 +321,15 @@ public abstract class DeviceUpdController {
         return time;
     }
 
+    public String getNormalResultStr(int delay,int delay_sub){
+        String ret = null;
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmm");
+        String dateString = formatter.format(currentTime);
+        dateString += String.format("%2d", delay) + String.format("%4d", delay_sub);
+        return "OK"+dateString;
+    }
+
     public String getResultStr(boolean state,int delay,int delay_sub){
         String ret = null;
         Date currentTime = new Date();
@@ -291,5 +356,14 @@ public abstract class DeviceUpdController {
             ret = FAIL_STR+dateString+led_type+String.format("%2d", led_lev);
         }
         return ret;
+    }
+
+    public String getResultStrConfig(int delay,int delay_sub,String conf){
+        String ret = null;
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmm");
+        String dateString = formatter.format(currentTime);
+        dateString += String.format("%2d", delay) + String.format("%4d", delay_sub);
+        return PASS2_STR+dateString+conf;
     }
 }

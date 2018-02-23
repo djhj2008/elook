@@ -39,6 +39,7 @@ public class SendJpg extends DeviceUpdController{
         int batlev = parseBatLev(msg);
         int type = msg[TYPE_START]&0xff;
         int led  = msg[LED_START]&0xff;
+        int res_led;
 
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){
@@ -46,7 +47,8 @@ public class SendJpg extends DeviceUpdController{
         }
         int delay = dev.getDeviceUpDelay();
         int delay_sub = dev.getDeviceUpDelaySub();
-        int tmp_value = dev.getDeviceTmpValue();
+        int upl_state = dev.getDeviceUplState();
+        int tmp_value;
 
         if(type == 0 ||type == 1){
             String filename = saveJpgPic(msg,devid);
@@ -55,28 +57,59 @@ public class SendJpg extends DeviceUpdController{
             if(filename!=null&&!filename.isEmpty()) {
                 String[] cmd = {".\\bin\\pic_decode.exe",filename,"tmp.bmp"};
                 ArrayList<String> result = SmallPicDecode(cmd);
-                int value = 0;
                 if(result!=null) {
+                    String strconf;
                     int index = result.size();
                     int deviceType = parseDeviceType(result.get(index-1));
-                    if(deviceType == DEVICE_TYPE_DIGIT){
-                        byte[] bmpall = HexString2Byte(result.get(index-3));
-                        savePicsPath(BMP_COUT,SMALL_PIC_WIDTH,SMALL_PIC_HEIGHT,bmpall,0,path);
+                    if(deviceType == DEVICE_TYPE_DIGIT) {
+                        byte[] bmpall = HexString2Byte(result.get(index - 3));
+                        strconf = result.get(index-4);
+                        savePicsPath(BMP_COUT, SMALL_PIC_WIDTH, SMALL_PIC_HEIGHT, bmpall, 0, path);
+                        String[] cmd2 = {".\\bin\\pic_decode_new.exe", path};
+                        ArrayList<String> result2 = SmallPicDecode(cmd);
+                        if (result2 != null) {
+                            String str_num = result.get(0);
+                            tmp_value = preParseAccessValue(str_num);
+                        } else {
+                            //解析失败
+                            String errfilename = saveErrJpgPic(msg, devid);
+                            saveDevErrPic(devid,batlev,EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
+                            return getResultStr(true,delay,delay_sub);
+                        }
+                    }else{
+                        strconf = result.get(index-3);
+                        strconf = strconf.substring(strconf.length()-4);
+                        tmp_value = Integer.valueOf(strconf);
                     }
-                    String[] cmd2 = {".\\bin\\pic_decode_new.exe",path};
-                    ArrayList<String> result2 = SmallPicDecode(cmd);
-                    if(result2!=null) {
-                        String str_num = result.get(0);
-                        value = preParseAccessValue(str_num);
-                    }
-                    else{
-                        String errfilename = saveErrJpgPic(msg,devid);
+                    String strled = strconf.substring(0,1);
+                    res_led = Integer.valueOf(strled);
 
+                    if(res_led!=led){
+                        saveEasyDev(devid,batlev,EasyDeviceInfo.DEVSTATE_DEV_LED_CORRECT);
+                    }else {
+                        int led_type = res_led;
+                        int led_lev = Integer.valueOf(strconf.substring(1, 2));
+                        saveDevFull(devid, batlev, EasyDeviceInfo.DEVSTATE_DEV_CONFIG_MIS, path, tmp_value, led_type, led_lev);
                     }
+                    return getResultStrConfig(delay,delay_sub,strconf);
                 }else{
                     //解析失败
+                    String errfilename = saveErrJpgPic(msg, devid);
+                    saveDevErrPic(devid,batlev,EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
+                    return getResultStr(true,delay,delay_sub);
                 }
             }
+        }else if(type == 2){
+            if(upl_state == 1){
+                upl_state = 0;
+                saveDevUplState(devid,upl_state);
+            }
+            String filename = saveNormalJpgPic(msg,devid);
+            int id = findTopAccessId(devid);
+            saveAccessUrl(id,filename);
+            return getNormalResultStr(delay,delay_sub);
+        }else{
+            //Nothing TODO
         }
         return null;
     }
@@ -94,6 +127,13 @@ public class SendJpg extends DeviceUpdController{
     public String saveJpgPic(byte[] msg,int devid) {
         String path = new File("normalup").getAbsolutePath();
         path += File.separator+devid+File.separator+getPicDir();
+        log.debug("path:"+path);
+        return saveJpgPicPath(msg,devid,path);
+    }
+
+    public String saveNormalJpgPic(byte[] msg,int devid) {
+        String path = new File("normalup").getAbsolutePath();
+        path += File.separator+devid+File.separator;
         log.debug("path:"+path);
         return saveJpgPicPath(msg,devid,path);
     }
