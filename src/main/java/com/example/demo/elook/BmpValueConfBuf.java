@@ -19,7 +19,7 @@ public class BmpValueConfBuf extends DeviceUpdController{
 
     @Override
     public String DeviceUpdCtrlHandle(byte[] msg) {
-        String ret="";
+        String ret=null;
         int devid = getDevid();
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
@@ -31,7 +31,7 @@ public class BmpValueConfBuf extends DeviceUpdController{
         int delay_sub = dev.getDeviceUpDelaySub();
         int tmp_value = dev.getDeviceTmpValue();
         int value = 0;
-        String path = savePicS(BMP_COUNT,SMALL_BMP_WIDTH,SMALL_BMP_HEIGHT,msg,BMP_START,SMALL_BMP_SIZE);
+        String path = savePicS(BMP_COUNT,SMALL_BMP_WIDTH,SMALL_BMP_HEIGHT,msg,BMP_START);
         if(path!=null&&!path.isEmpty()) {
             String[] cmd = {".\\bin\\pic_decode_new.exe",path};
             ArrayList<String> result = SmallPicDecode(cmd);
@@ -41,7 +41,7 @@ public class BmpValueConfBuf extends DeviceUpdController{
             }
         }
 
-        int state = 0;
+        int state;
         if(value == tmp_value){
             state = EasyDeviceInfo.DEVSTATE_CONFIG_PASS;
             saveAccess(devid,value);

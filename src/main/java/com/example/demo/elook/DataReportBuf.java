@@ -22,7 +22,7 @@ public class DataReportBuf extends DeviceUpdController{
 
     @Override
     public String DeviceUpdCtrlHandle(byte[] msg) {
-        String ret="";
+        String ret=null;
         int devid = getDevid();
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
@@ -37,7 +37,7 @@ public class DataReportBuf extends DeviceUpdController{
         int led_type = dev.getDeviceLedType();
         int led_lev = dev.getDeviceLedLevel();
         int value = 0;
-        String path = savePicS(BMP_COUNT,SMALL_BMP_WIDTH,SMALL_BMP_HEIGHT,msg,BMP_START,BMP_COUNT*SMALL_BMP_SIZE);
+        String path = savePicS(BMP_COUNT,SMALL_BMP_WIDTH,SMALL_BMP_HEIGHT,msg,BMP_START);
 
         if(path!=null&&!path.isEmpty()) {
             String[] cmd = {".\\bin\\pic_decode_new.exe",path};
@@ -58,7 +58,7 @@ public class DataReportBuf extends DeviceUpdController{
         if(upl == 0){
             ret = getResultStr(true,delay,delay_sub,led_type,led_lev);
         }else{
-            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);;
+            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
         }
         return ret;
     }

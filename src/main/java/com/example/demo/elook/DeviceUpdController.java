@@ -22,8 +22,8 @@ public abstract class DeviceUpdController {
     private String PASS_STR = "OK1";
     private String FAIL_STR = "OK2";
 
-    public final int DATA_START  = 0;
-    public final int SN_LEN      = 9;
+    private final int DATA_START  = 0;
+    private final int SN_LEN      = 9;
     public final int BATLEVL_START = DATA_START+SN_LEN;
     public final int BATLEVL_LEN = 1;
     public final int NUM_COUNT = 5;
@@ -45,14 +45,14 @@ public abstract class DeviceUpdController {
     }
 
     public short Byte2Short(byte[] buf,int offset) {
-        short num = 0;
+        short num;
         num=(short)(buf[offset]<<8&buf[offset+1]);
         return num;
     }
 
-    public int Byte2Int(byte[] buf,int offset) {
-        int num = 0;
-        num=(int)(buf[offset]<<24&buf[offset+1]<<16&buf[offset+2]<<8&buf[offset+3]);
+    public int Byte2Int(byte[] buf, int offset) {
+        int num;
+        num=buf[offset]<<24&buf[offset+1]<<16&buf[offset+2]<<8&buf[offset+3];
         return num;
     }
 
@@ -66,9 +66,14 @@ public abstract class DeviceUpdController {
         return dateString;
     }
 
-    public String savePicS(int count,int width,int height,byte[] bmpall,int offset,int len) {
-        String path = new File("").getAbsolutePath();
+    public String savePicS(int count, int width, int height, byte[] bmpall, int offset) {
+        String path = new File("normalup").getAbsolutePath();
         path += File.separator + devid + File.separator + getPicDir();
+        log.debug("path:" + path);
+        return savePicsPath(count,width,height,bmpall,offset,path);
+    }
+
+    public String savePicsPath(int count, int width, int height, byte[] bmpall, int offset, String path) {
         File tempFile = new File(path);
         log.debug("path:" + path);
         if (!tempFile.exists()) {
@@ -84,9 +89,7 @@ public abstract class DeviceUpdController {
                 bmpwrier.savebmpTop(os);
                 bmpwrier.savebmpInfo(os);
                 bmpwrier.savebmpDate(os,bmpall,offset+i*width*height,width*height);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
+            }catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 // 完毕，关闭所有链接

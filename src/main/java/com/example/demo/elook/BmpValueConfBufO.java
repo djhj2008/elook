@@ -45,7 +45,7 @@ public class BmpValueConfBufO extends DeviceUpdController{
         int tmp_value = dev.getDeviceTmpValue();
         int value = 0;
 
-        String path = savePicS(BMP_COUNT,width,height,msg,BMP_START,bmp_size);
+        String path = savePicS(BMP_COUNT,width,height,msg,BMP_START);
         if(path!=null&&!path.isEmpty()) {
             String[] cmd = {".\\bin\\pic_old_decode.exe",path,""+radius,""+width,""+height,""+angle};
             ArrayList<String> result = SmallPicDecode(cmd);
