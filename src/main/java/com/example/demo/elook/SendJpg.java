@@ -81,16 +81,6 @@ public class SendJpg extends DeviceUpdController{
         return null;
     }
 
-    public String getPicDir(){
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String dateString = formatter.format(currentTime);
-        //Random rand=new Random();
-        int rdm=(int)(Math.random()*(9999-1000+1)+1000);
-        dateString=dateString+"_"+rdm;
-        return dateString;
-    }
-
     public String getPicName(){
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
