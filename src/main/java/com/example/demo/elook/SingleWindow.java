@@ -8,6 +8,7 @@ import com.example.demo.mod.EasyDevice;
 import com.example.demo.repository.mysql.EasyDevRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.orm.jpa.JpaSystemException;
 
 public class SingleWindow {
     private static final Logger log = LoggerFactory.getLogger(SingleWindow.class);
@@ -52,34 +53,21 @@ public class SingleWindow {
         return ret;
     }
 
-    public boolean checkSum(byte[] frame,int offset,int len){
-        boolean ret = false;
-        int sum=0;
-        int sum2 = frame[offset+len]&0xff;
-        log.debug("sum2:"+sum2);
-        for(int i=0 ;i<len;i++){
-            sum+=frame[i]&0xff;
-        }
-        sum=sum&0xff;
-        log.debug("sum:"+sum);
-        if(sum==sum2){
-            ret = true;
-        }
-        return ret;
-    }
-
     public int getDevState(int sn){
-        int state=0;
+        int state=-1;
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        List<EasyDevice> list = easyDevRepository.findByDeviceDeviceId(sn);
-        for(int i=0;i<list.size();i++) {
-            log.debug(i+":" + list.get(i).toString());
-        }
-        if(list.isEmpty()){
+        try {
+            List<EasyDevice> list = easyDevRepository.findDeviceDevStateByDeviceDeviceId(sn);
+            for(int i=0;i<list.size();i++) {
+                log.debug(i+":" + list.get(i).toString());
+            }
+            if(!list.isEmpty()){
+                state=list.get(0).getDeviceDevState();
+            }
+        }catch (JpaSystemException e){
 
-        }else{
-            state=list.get(0).getDeviceDevState();
         }
+
         return state;
     }
 }

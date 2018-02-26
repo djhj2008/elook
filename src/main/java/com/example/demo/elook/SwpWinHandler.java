@@ -123,13 +123,13 @@ public class SwpWinHandler{
 
     private int load_swp_sn(byte[] frame){
         int sn = 0;
-        sn = frame[SN_START] & 0xff;
+        sn = frame[SN_START+3] & 0xff;
         //log.debug("sn:"+Integer.toHexString(sn));
-        sn = sn | ((frame[SN_START + 1] & 0xff) << 8 & 0xffffffff);
+        sn = sn | ((frame[SN_START + 2] & 0xff) << 8 & 0xffffffff);
         //log.debug("sn:"+Integer.toHexString(sn));
-        sn = sn | ((frame[SN_START + 2] & 0xff) << 16 & 0xffffffff);
+        sn = sn | ((frame[SN_START + 1] & 0xff) << 16 & 0xffffffff);
         //log.debug("sn:"+Integer.toHexString(sn));
-        sn = sn | ((frame[SN_START + 3] & 0xff) << 24 & 0xffffffff);
+        sn = sn | ((frame[SN_START] & 0xff) << 24 & 0xffffffff);
         //log.debug("sn:"+Integer.toHexString(sn));
         log.debug("sn:"+sn);
         return sn;
