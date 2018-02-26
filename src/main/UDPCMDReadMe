@@ -88,7 +88,7 @@ Type：1字节
 解析失败："OK1"+TIME(12字节)+Delay(6字节)
 解析成功: "OK0"+TIME(12字节)+Delay(6字节)+解析数据（设备端自行解析）
 
-public final static int BMP_VALUECONF_BUF = 10;
+BMP_VALUECONF_BUF = 10;
 上报5个bmp格式小图片由服务器于配置中解析的数据比较
 数据段格式：
 SN+BATLEV+5*BMP_BUF(5个12*18字节的BMP buf)
@@ -96,7 +96,7 @@ SN+BATLEV+5*BMP_BUF(5个12*18字节的BMP buf)
 相同：“OK1”+TIME(12字节)+Delay(6字节)
 不同：“OK2”+TIME(12字节)+Delay(6字节)
 
-public final static int DATA_REPORT_BUF = 11;
+DATA_REPORT_BUF = 11;
 上报5个bmp格式小图片由服务器解析保存
 数据段格式：
 SN+BATLEV+5*BMP_BUF(5个12*18字节的BMP buf)
@@ -104,7 +104,7 @@ SN+BATLEV+5*BMP_BUF(5个12*18字节的BMP buf)
 需要上传图片：“OK1”+TIME(12字节)+Delay(6字节)+LED(3字节)
 不需要上传图片：“OK2”+TIME(12字节)+Delay(6字节)+LED(3字节)
 
-public final static int BMP_VALUECONF_BUF_OLD = 12;
+BMP_VALUECONF_BUF_OLD = 12;
 上报5个bmp格式小图片和图片信息 由服务器于配置中解析的数据比较
 数据段格式：
 SN+BATLEV+Radius(每个表盘的半径1字节)+Width(图片宽1字节)+Height(图片高度1字节)+Agle(角度2字节)+5*BMP_BUF(5个w*h字节的BMP buf)
@@ -112,8 +112,7 @@ SN+BATLEV+Radius(每个表盘的半径1字节)+Width(图片宽1字节)+Height(�
 相同：“OK1”+TIME(12字节)+Delay(6字节)
 不同：“OK2”+TIME(12字节)+Delay(6字节)
 
-
-public final static int DATA_REPORT_BUF_OLD = 13;
+DATA_REPORT_BUF_OLD = 13;
 上报5个bmp格式小图片和图片信息 由服务器于配置中解析的数据比较
 数据段格式：
 SN+BATLEV+Radius(每个表盘的半径1字节)+Width(图片宽1字节)+Height(图片高度1字节)+Agle(角度2字节)+5*BMP_BUF(5个w*h字节的BMP buf)
