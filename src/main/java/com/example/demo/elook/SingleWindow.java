@@ -39,6 +39,10 @@ public class SingleWindow {
         return ret;
     }
 
+    public byte[] getSlot(){
+        return slot;
+    }
+
     public boolean saveSlotMsg(byte[] frame,int offset,int len){
         boolean ret = false;
         Arrays.fill(slot,(byte)0);

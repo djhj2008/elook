@@ -21,10 +21,9 @@ import static java.lang.Thread.sleep;
 
 public class SwpWinHandler{
     private static final Logger log = LoggerFactory.getLogger(SwpWinHandler.class);
-
-    final static int FLAG_ACK_VALID  = 'a';
-    final static int FLAG_HURT_VALID = 'b';
-    final static int FLAG_DATA_VALID = 'd';
+    final static byte FLAG_ACK_VALID  = 'a';
+    final static byte FLAG_HURT_VALID = 'b';
+    final static byte FLAG_DATA_VALID = 'd';
     final static int HEAD_LEN        = 3 ;
     final static int SN_START        = HEAD_LEN ;
     final static int SN_PRE_LEN      = 4 ;

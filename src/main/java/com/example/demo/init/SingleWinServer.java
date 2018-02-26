@@ -10,9 +10,6 @@ import org.springframework.scheduling.annotation.Async;
 
 public class SingleWinServer {
     private static final Logger log= LoggerFactory.getLogger(SingleWinServer.class);
-    final static int FLAG_ACK_VALID  = 'a';
-    final static int FLAG_HURT_VALID = 'b';
-    final static int FLAG_DATA_VALID = 'd';
     final static int HEAD_LEN        = 3 ;
     final static int SN_START        = HEAD_LEN ;
     final static int SN_LEN          = 4;
@@ -36,10 +33,11 @@ public class SingleWinServer {
             if (mSingleWindow.checkSum(frame, DSTART, len) == true) {
                 mSingleWindow.saveSlotMsg(frame, DSTART, len);
             } else {
-                log.debug("checkSum error!");
+                log.debug("No Data.");
             }
         }
         int cmd = mSingleWindow.getCmd();
+        byte[] msg = mSingleWindow.getSlot();
         String ret = null;
         if(cmd ==ElookCmdUrl.GET_DEVSTATE){
             int state = mSingleWindow.getDevState(sn);
@@ -54,12 +52,12 @@ public class SingleWinServer {
         }
         else if(cmd == ElookCmdUrl.BMP_VALUECONF){
             BmpValueConf bvc = new BmpValueConf(sn,cmd);
-            ret = bvc.DeviceUpdCtrlHandle(frame);
+            ret = bvc.DeviceUpdCtrlHandle(msg);
 
         }
         else if(cmd == ElookCmdUrl.DATA_REPORT){
             DataReport dr = new DataReport(sn,cmd);
-            ret = dr.DeviceUpdCtrlHandle(frame);
+            ret = dr.DeviceUpdCtrlHandle(msg);
 
         }
         if(ret!=null&&!ret.isEmpty()){

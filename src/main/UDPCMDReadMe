@@ -1,0 +1,122 @@
+UDP协议格式：
+发送帧数据段标准格式（支持滑动窗口）：
+帧头（3字节）+SN（4字节）+命令号（1字节）+数据内容长度（2字节）+数据（n字节）+校验和（1字节）
+说明：如数据长度为0则无数据内容和校验和，所有数据都为小端存储模式（高字节高位低字节低位）
+1 帧类型：1字节
+字符'b' 心跳帧 开始发送滑动窗口前发送该帧
+字符'd' 标准数据帧
+2 总帧数：1字节
+3 当前帧号：1字节
+
+返回帧数据段标准格式（返回数据目前固定为单窗口）：
+帧头（3字节）+SN（4字节）+命令号（1字节）+数据内容长度（2字节）+数据（n字节）+校验和（1字节）
+帧头包括三部分：
+1 帧类型：1字节
+字符'a' 服务器返回给设备的帧头
+2 总帧数：1字节（固定为1）
+3 当前帧号：1字节 （固定为1）
+
+发送帧数据段标准格式：
+SN（设备序列号9字节字符串"110000001"）
+BATLEV（电池状态 1字节 0为正常 1为低电）
+Value:为4字节int型数据
+Time(12字节时间字符串如2018年3月1日14点00分为"201803011400")
+
+返回帧数据段标准格式：
+“OK”+result
+Time(12字节时间字符串如2018年3月1日14点00分为"201803011400")
+Delay（设备上报间隔 6字节 ）=天数（2字节天数）+TIME（2小时字节+2小时分钟 ）
+LED（3字节 1字节LED类型 2字节LED级别）
+
+命令号功能：
+GET_DEVSTATE = 1;
+获取设备状态
+数据段格式：空
+返回内容：“OK”+state（设备状态 1字节字符串）
+状态说明：
+DEVSTATE_PRE_INIT = 0;  //设备未初始化 新设备
+DEVSTATE_HAS_CONNECT_SERVER = 1;  //设备已经开始配置之前 成功连接服务器
+DEVSTATE_START_TO_CONFIG = 2;     //设备开始配置
+DEVSTATE_ERROR_NORMAL = 3;        //标准错误
+DEVSTATE_DIG_PARSE_FAIL = 4;      //配置过程中 解析设备上报的图片错误
+DEVSTATE_CONFIG_PASS = 5;         //配置成功
+DEVSTATE_CONFIRM_FAIL = 6;        //服务器解析数据和设备解析数据 结果不同 比较失败
+DEVSTATE_ERROR_OFFLINE = 7;       //设备断网 规定时间内为连接服务器
+DEVSTATE_DEVID_NOT_EXISTED = 8;   //设备未在服务器注册
+DEVSTATE_DEV_CONFIG_MIS = 9;      //设备配置后 等待设备上传数据
+DEVSTATE_DEV_LED_CORRECT = A;    //设备LED和解析需要的LED灯的配置不同
+
+SET_DEVSTATE = 2;
+设备不支持该命令
+
+SENDBMP = 3;
+设备不支持BMP格式图片上传
+
+BMP_VALUECONF = 4;
+设备数据解析于服务器解析对比
+数据段格式：
+SN+BATLEV+Value(4字节)
+返回内容：
+相同：“OK1”+TIME(12字节)+Delay(6字节)
+不同：“OK2”+TIME(12字节)+Delay(6字节)
+
+DATA_REPORT = 5;
+设备数据上报服务器
+数据段格式：
+SN+BATLEV+Count(1字节)+Data(16字节)
+Count：1字节表示 之后Data数据个数
+Data：Value（4字节）+Time(12字节)
+返回：
+需要上传图片：“OK1”+TIME(12字节)+Delay(6字节)+LED(3字节)
+不需要上传图片：“OK2”+TIME(12字节)+Delay(6字节)+LED(3字节)
+
+LOGS = 6;
+保存设备log到服务器
+数据段格式：
+SN+BATLEV+Log(Log字符串)
+返回：
+“OK”
+
+SENDJPG = 7;
+设备上传JPG格式图片
+数据段格式：
+SN+BATLEV+Type(1字节)+Led（1字节led配置类型）+jpg图片（n字节）
+Type：1字节
+配置中上报图片（type==0||type==1）
+正常上报图片（type=2）
+返回：
+解析失败："OK1"+TIME(12字节)+Delay(6字节)
+解析成功: "OK0"+TIME(12字节)+Delay(6字节)+解析数据（设备端自行解析）
+
+public final static int BMP_VALUECONF_BUF = 10;
+上报5个bmp格式小图片由服务器于配置中解析的数据比较
+数据段格式：
+SN+BATLEV+5*BMP_BUF(5个12*18字节的BMP buf)
+返回:
+相同：“OK1”+TIME(12字节)+Delay(6字节)
+不同：“OK2”+TIME(12字节)+Delay(6字节)
+
+public final static int DATA_REPORT_BUF = 11;
+上报5个bmp格式小图片由服务器解析保存
+数据段格式：
+SN+BATLEV+5*BMP_BUF(5个12*18字节的BMP buf)
+返回:
+需要上传图片：“OK1”+TIME(12字节)+Delay(6字节)+LED(3字节)
+不需要上传图片：“OK2”+TIME(12字节)+Delay(6字节)+LED(3字节)
+
+public final static int BMP_VALUECONF_BUF_OLD = 12;
+上报5个bmp格式小图片和图片信息 由服务器于配置中解析的数据比较
+数据段格式：
+SN+BATLEV+Radius(每个表盘的半径1字节)+Width(图片宽1字节)+Height(图片高度1字节)+Agle(角度2字节)+5*BMP_BUF(5个w*h字节的BMP buf)
+返回:
+相同：“OK1”+TIME(12字节)+Delay(6字节)
+不同：“OK2”+TIME(12字节)+Delay(6字节)
+
+
+public final static int DATA_REPORT_BUF_OLD = 13;
+上报5个bmp格式小图片和图片信息 由服务器于配置中解析的数据比较
+数据段格式：
+SN+BATLEV+Radius(每个表盘的半径1字节)+Width(图片宽1字节)+Height(图片高度1字节)+Agle(角度2字节)+5*BMP_BUF(5个w*h字节的BMP buf)
+返回:
+需要上传图片：“OK1”+TIME(12字节)+Delay(6字节)+LED(3字节)
+不需要上传图片：“OK2”+TIME(12字节)+Delay(6字节)+LED(3字节)

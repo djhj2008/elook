@@ -17,9 +17,6 @@ import static java.lang.Thread.sleep;
 @Component
 public class SwpWinServer{
     private static final Logger log= LoggerFactory.getLogger(SwpWinServer.class);
-    final static int FLAG_ACK_VALID  = 'a';
-    final static int FLAG_HURT_VALID = 'b';
-    final static int FLAG_DATA_VALID = 'd';
     final static int HEAD_LEN        = 3 ;
     final static int SN_START        = HEAD_LEN ;
     final static int SN_LEN          = 4;
