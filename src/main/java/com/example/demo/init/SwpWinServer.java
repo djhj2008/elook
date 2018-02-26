@@ -92,30 +92,44 @@ public class SwpWinServer{
                 if (mSwpWindow.RevDone()) {
                     int cmd = mSwpWindow.getCmd();
                     byte[] msg = mSwpWindow.getMsg();
+                    String ret = null;
                     if (cmd == ElookCmdUrl.SENDJPG) {
-                        mSwpWindow.savePic();
-                        mListener.listener(sn,"DONE");
-                        return;
-                    }else if(cmd == ElookCmdUrl.BMP_VALUECONF_BUF){
+                        SendJpg sendjpg = new SendJpg(sn,cmd);
+                        ret = sendjpg.DeviceUpdCtrlHandle(msg);
+
+                    }
+                    else if(cmd == ElookCmdUrl.BMP_VALUECONF_BUF){
                         BmpValueConfBuf bvcf = new BmpValueConfBuf(sn,cmd);
-                        String ret = bvcf.DeviceUpdCtrlHandle(msg);
-                        if(ret!=null&&!ret.isEmpty()){
-                            requestAckString(ctx, packet,sn,cmd,ret);
-                        }
+                        ret = bvcf.DeviceUpdCtrlHandle(msg);
 
-                    }else if(cmd == ElookCmdUrl.BMP_VALUECONF_BUF_OLD){
+                    }
+                    else if(cmd == ElookCmdUrl.BMP_VALUECONF_BUF_OLD){
                         BmpValueConfBufO bvcfo = new BmpValueConfBufO(sn,cmd);
-                        String ret = bvcfo.DeviceUpdCtrlHandle(msg);
-                        if(ret!=null&&!ret.isEmpty()){
-                            requestAckString(ctx, packet,sn,cmd,ret);
-                        }
+                        ret = bvcfo.DeviceUpdCtrlHandle(msg);
 
-                    }else if(cmd == ElookCmdUrl.DATA_REPORT_BUF){
+                    }
+                    else if(cmd == ElookCmdUrl.BMP_VALUECONF){
+                        BmpValueConf bvc = new BmpValueConf(sn,cmd);
+                        ret = bvc.DeviceUpdCtrlHandle(msg);
+
+                    }
+                    else if(cmd == ElookCmdUrl.DATA_REPORT_BUF){
                         DataReportBuf drb = new DataReportBuf(sn,cmd);
-                        drb.DeviceUpdCtrlHandle(msg);
+                        ret = drb.DeviceUpdCtrlHandle(msg);
 
-                    }else if(cmd == ElookCmdUrl.DATA_REPORT_BUF_OLD){
+                    }
+                    else if(cmd == ElookCmdUrl.DATA_REPORT_BUF_OLD){
+                        DataReportBufO drbo = new DataReportBufO(sn,cmd);
+                        ret = drbo.DeviceUpdCtrlHandle(msg);
 
+                    }
+                    else if(cmd == ElookCmdUrl.DATA_REPORT){
+                        DataReport dr = new DataReport(sn,cmd);
+                        ret = dr.DeviceUpdCtrlHandle(msg);
+
+                    }
+                    if(ret!=null&&!ret.isEmpty()){
+                        requestAckString(ctx, packet,sn,cmd,ret);
                     }
                 }
                 mListener.listener(sn,"FULL");

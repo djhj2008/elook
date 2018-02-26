@@ -1,8 +1,6 @@
 package com.example.demo.init;
 
-import com.example.demo.elook.ElookCmdUrl;
-import com.example.demo.elook.SingleWindow;
-import com.example.demo.elook.SwpWindows;
+import com.example.demo.elook.*;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
@@ -17,12 +15,13 @@ public class SingleWinServer {
     final static int FLAG_DATA_VALID = 'd';
     final static int HEAD_LEN        = 3 ;
     final static int SN_START        = HEAD_LEN ;
-    final static int SN_LEN          = 4 ;
+    final static int SN_LEN          = 4;
     final static int SN_END          = HEAD_LEN+SN_LEN;
+    final static int CMD_START       = SN_END;
     final static int CMD_LEN         = 1 ;
     final static int CMD_END         = SN_END+CMD_LEN;
     final static int DATA_LEN        = 2 ;
-    final static int DSTART          = CMD_END+DATA_LEN ;
+    final static int DSTART          = HEAD_LEN+SN_LEN+DATA_LEN ;
     final static int CHECK_SUM_LEN   = 1;
 
     short MaxNum;
@@ -40,10 +39,31 @@ public class SingleWinServer {
                 log.debug("checkSum error!");
             }
         }
-        if(mSingleWindow.getCmd()==ElookCmdUrl.GET_DEVSTATE){
+        int cmd = mSingleWindow.getCmd();
+        String ret = null;
+        if(cmd ==ElookCmdUrl.GET_DEVSTATE){
             int state = mSingleWindow.getDevState(sn);
             log.debug("state:"+state);
-            requestAckString(ctx,packet,"OK"+state);
+            if(state == 10){
+                ret = "OKA";
+            }else if(state < 10){
+                ret = "OK"+state;
+            }else{
+                ret = "OKE";
+            }
+        }
+        else if(cmd == ElookCmdUrl.BMP_VALUECONF){
+            BmpValueConf bvc = new BmpValueConf(sn,cmd);
+            ret = bvc.DeviceUpdCtrlHandle(frame);
+
+        }
+        else if(cmd == ElookCmdUrl.DATA_REPORT){
+            DataReport dr = new DataReport(sn,cmd);
+            ret = dr.DeviceUpdCtrlHandle(frame);
+
+        }
+        if(ret!=null&&!ret.isEmpty()){
+            requestAckString(ctx, packet,sn,cmd,ret);
         }
     }
 
@@ -68,19 +88,52 @@ public class SingleWinServer {
         return len;
     }
 
-    private void requestAckString(ChannelHandlerContext ctx,DatagramPacket packet,String str){
+    private void requestAckString(ChannelHandlerContext ctx,DatagramPacket packet,int sn,int cmd,String str){
         int len = str.getBytes().length;
         byte[] ack = new byte[DSTART+len+CHECK_SUM_LEN];
         ack[0] = 'a';
         ack[1] = 0x01;
         ack[2] = 0x01;
-        ack[SN_START] = 0x01;
-        ack[SN_START+1] = 0x01;;
-        ack[SN_START+2] = 0x01;;
-        ack[SN_START+3] = 0x01;;
-        ack[SN_END] = 0x01;;
-        ack[SN_END+1] = (byte)(len&0xff);
+        System.arraycopy(intToByte(sn),0,ack,SN_START,SN_LEN);
+        ack[CMD_START] = (byte)(cmd&0xff);
+        byte[] len_buf;
+        len_buf = shortToByte((short)len);
+        System.arraycopy(len_buf,0,ack,CMD_END,DATA_LEN);
         System.arraycopy(str.getBytes(),0,ack,DSTART,len);
-        ctx.write(new DatagramPacket(Unpooled.copiedBuffer(ack,0,DSTART+len+CHECK_SUM_LEN), packet.sender()));
+        ack[DSTART+len] = Str2CheckSum(str);//sum;
+        ctx.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer(ack,0,DSTART+len+CHECK_SUM_LEN), packet.sender()));
+        len_buf = null;
+        ack = null;
+    }
+
+    public static byte[] intToByte(int number) {
+        int temp = number;
+        byte[] b = new byte[4];
+        for (int i = 0; i < b.length; i++) {
+            b[i] = new Integer(temp & 0xff).byteValue();
+            temp = temp >> 8; // 向右移8位
+            //log.debug("buf:"+Integer.toHexString(b[i]));
+        }
+        return b;
+    }
+
+    public static byte[] shortToByte(short number) {
+        int temp = number;
+        byte[] b = new byte[2];
+        for (int i = 0; i < b.length; i++) {
+            b[i] = new Integer(temp & 0xff).byteValue();
+            temp = temp >> 8; // 向右移8位
+            //log.debug("buf:"+Integer.toHexString(b[i]));
+        }
+        return b;
+    }
+
+    private byte Str2CheckSum(String str){
+        int sum=0;
+        byte[] buf=str.getBytes();
+        for(int i=0;i<=buf.length;i++){
+            sum+=buf[i];
+        }
+        return (byte)(sum&0xff);
     }
 }
