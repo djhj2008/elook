@@ -1,5 +1,7 @@
 package com.example.demo.mod;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 /**
@@ -9,6 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table
+@DynamicUpdate
 public class EasyDevice {
     @Column(name = "device_auto_id")
     private int deviceAutoId;
@@ -168,6 +171,6 @@ public class EasyDevice {
 
     public String toString()
     {
-        return "id:"+deviceAutoId+" devid:"+deviceDeviceId+" state:"+deviceDevState;
+        return "id:"+deviceAutoId+" devid:"+deviceDeviceId+" state:"+deviceDevState+" tmp_value:"+deviceTmpValue;
     }
 }

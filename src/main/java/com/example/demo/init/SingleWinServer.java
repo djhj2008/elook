@@ -22,12 +22,13 @@ public class SingleWinServer extends WinServerInterface{
             if (checkSum(frame, DSTART, len) == true) {
                 mSingleWindow.saveSlotMsg(frame, DSTART, len);
             } else {
-                log.debug("No Data.");
+                log.debug("CheckSum Error.");
             }
         }
-        int cmd = mSingleWindow.getCmd();
+        int cmd = load_cmd(frame);
         byte[] msg = mSingleWindow.getSlot();
         String ret = null;
+        log.debug("CMD:"+cmd);
         if(cmd ==ElookCmdUrl.GET_DEVSTATE){
             int state = mSingleWindow.getDevState(sn);
             log.debug("state:"+state);

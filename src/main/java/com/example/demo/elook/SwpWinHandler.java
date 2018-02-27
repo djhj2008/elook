@@ -112,6 +112,8 @@ public class SwpWinHandler{
                 if(mSwpWindow!=null) {
                     win_map.remove(sn);
                     mSwpWindow=null;
+                }else{
+
                 }
                 SingleWinServer mSingleWinServer = (SingleWinServer) StartupEvent.getBean(SingleWinServer.class);
                 mSingleWinServer.run(ctx,packet,frame);

@@ -20,12 +20,15 @@ public class BmpValueConf extends DeviceUpdController {
         int devid = getDevid();
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){
-            return null;
+            return "OKE";
         }
         int delay = dev.getDeviceUpDelay();
         int delay_sub = dev.getDeviceUpDelaySub();
         int tmp_value = dev.getDeviceTmpValue();
         int value = Byte2Int(msg,VALUE_START);
+        int id =dev.getDeviceAutoId();
+        log.debug("value:"+value);
+        log.debug("tmp_value:"+tmp_value);
 
         int state = 0;
         if(value == tmp_value){
@@ -36,7 +39,7 @@ public class BmpValueConf extends DeviceUpdController {
             state = EasyDeviceInfo.DEVSTATE_CONFIRM_FAIL;
             ret = getResultStr(false,delay,delay_sub);
         }
-        saveEasyDev(devid,batlev,state);
+        saveEasyDev(id,batlev,state);
         return ret;
     }
 }

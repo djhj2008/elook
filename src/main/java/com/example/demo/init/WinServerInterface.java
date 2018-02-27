@@ -50,6 +50,14 @@ public abstract class WinServerInterface {
         return sn;
     }
 
+    public int load_cmd(byte[] frame){
+        int cmd = 0;
+        cmd = frame[SN_END] & 0xff;
+        log.debug("cmd:"+cmd);
+        return cmd;
+    }
+
+
     public short load_swp_data_len(byte[] frame){
         short len = 0;
         len = (short)(frame[DATA_LEN_START+1] & 0xff);

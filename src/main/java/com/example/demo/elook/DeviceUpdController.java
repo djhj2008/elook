@@ -7,6 +7,8 @@ import com.example.demo.repository.mysql.EasyAccessRepository;
 import com.example.demo.repository.mysql.EasyDevRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.orm.jpa.JpaSystemException;
+
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -104,14 +106,14 @@ public abstract class DeviceUpdController {
         return tempFile.getPath();
     }
 
-    public void saveEasyDev(int devid,int batlev,int state){
+    public void saveEasyDev(int id,int batlev,int state){
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
         EasyDevice devstate = new EasyDevice();
-        devstate.setDeviceDeviceId(devid);
+        devstate.setDeviceAutoId(id);
         devstate.setDeviceDevStateSub(0);
         devstate.setDeviceBetteryLev(batlev);
         devstate.setDeviceDevState(state);
-        easyDevRepository.save(devstate);
+        easyDevRepository.updateStatusById(id,state,batlev);
     }
 
     public void saveDevUplState(int devid,int state){
@@ -284,14 +286,18 @@ public abstract class DeviceUpdController {
     public EasyDevice findEasyDev(int sn){
         EasyDevice dev = null;
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        List<EasyDevice> list = easyDevRepository.findByDeviceDeviceId(sn);
-        for(int i=0;i<list.size();i++) {
-            log.debug(i+":" + list.get(i).toString());
-        }
-        if(list.isEmpty()){
+        try {
+            List<EasyDevice> list = easyDevRepository.findByDeviceDeviceId(sn);
+            for (int i = 0; i < list.size(); i++) {
+                log.debug(i + ":" + list.get(i).toString());
+            }
+            if (list.isEmpty()) {
 
-        }else{
-            dev=list.get(0);
+            } else {
+                dev = list.get(0);
+            }
+        }catch (JpaSystemException e){
+
         }
         return dev;
     }
@@ -299,7 +305,11 @@ public abstract class DeviceUpdController {
     public int parseDevId(byte[] msg){
         byte[] sn_buf = new byte[SN_LEN];
         System.arraycopy(msg,DATA_START,sn_buf,0,SN_LEN);
-        String sn_str = sn_buf.toString();
+        for(int i=0;i<SN_LEN;i++){
+            log.debug(""+sn_buf[i]);
+        }
+        String sn_str =new String(sn_buf);
+        log.debug(sn_str);
         int sn_c = Integer.valueOf(sn_str);
         return sn_c;
     }
