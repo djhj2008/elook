@@ -16,6 +16,10 @@ public class SingleWinServer extends WinServerInterface{
     @Async("myTaskAsyncPool")
     public void run(ChannelHandlerContext ctx, DatagramPacket packet, byte[] frame) {
         int sn = load_swp_sn(frame);
+        int cmd = load_cmd(frame);
+        String ret = null;
+        log.debug("CMD:"+cmd);
+
         SingleWindow mSingleWindow = new SingleWindow(sn,ElookCmdUrl.GET_DEVSTATE);
         int len = load_swp_data_len(frame);
         if(len > 0) {
@@ -23,12 +27,14 @@ public class SingleWinServer extends WinServerInterface{
                 mSingleWindow.saveSlotMsg(frame, DSTART, len);
             } else {
                 log.debug("CheckSum Error.");
+                ret = "OKE";
+                requestAckString(ctx, packet,sn,cmd,ret);
+                return;
             }
         }
-        int cmd = load_cmd(frame);
+
         byte[] msg = mSingleWindow.getSlot();
-        String ret = null;
-        log.debug("CMD:"+cmd);
+
         if(cmd ==ElookCmdUrl.GET_DEVSTATE){
             int state = mSingleWindow.getDevState(sn);
             log.debug("state:"+state);

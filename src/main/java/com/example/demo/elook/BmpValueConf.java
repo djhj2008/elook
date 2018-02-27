@@ -22,6 +22,11 @@ public class BmpValueConf extends DeviceUpdController {
         if(dev == null){
             return "OKE";
         }
+        for(int i=0;i<16;i++){
+            log.debug("msg["+i+"]"+msg[i]);
+        }
+
+
         int delay = dev.getDeviceUpDelay();
         int delay_sub = dev.getDeviceUpDelaySub();
         int tmp_value = dev.getDeviceTmpValue();

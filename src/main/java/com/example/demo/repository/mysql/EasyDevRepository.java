@@ -14,6 +14,6 @@ public interface EasyDevRepository extends JpaRepository<EasyDevice,Integer> {
     List<EasyDevice> findDeviceDevStateByDeviceDeviceId(int devid);
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "update easy_device ed set ed.state =?2 ed.device_bettery_lev =?3 where ed.device_auto_id = ?1",nativeQuery = true)
+    @Query(value = "update easy_device ed set ed.device_dev_state  =?2 ,ed.device_bettery_lev =?3 where ed.device_auto_id = ?1",nativeQuery = true)
     int updateStatusById(int auto_id,int state,int bat_lev);
 }
