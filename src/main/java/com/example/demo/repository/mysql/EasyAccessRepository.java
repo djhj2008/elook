@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface EasyAccessRepository extends JpaRepository<EasyAccess,Integer> {
     List<EasyAccess> findTop1ByAccessDeviceIdOrderByAccessTimeDesc(int devid);
+
 }

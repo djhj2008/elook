@@ -30,8 +30,8 @@ public class BmpValueConf extends DeviceUpdController {
         int delay = dev.getDeviceUpDelay();
         int delay_sub = dev.getDeviceUpDelaySub();
         int tmp_value = dev.getDeviceTmpValue();
-        int value = Byte2Int(msg,VALUE_START);
         int id =dev.getDeviceAutoId();
+        int value = Byte2Int(msg,VALUE_START);
         log.debug("value:"+value);
         log.debug("tmp_value:"+tmp_value);
 

@@ -24,12 +24,12 @@ public abstract class WinServerInterface {
         boolean ret = false;
         int sum=0;
         int sum2 = frame[offset+len]&0xff;
-        log.debug("sum2:"+sum2);
+        log.debug("sum2:"+Integer.toHexString(sum2));
         for(int i=0 ;i<len;i++){
             sum+=frame[offset+i]&0xff;
         }
         sum=sum&0xff;
-        log.debug("sum:"+sum);
+        log.debug("sum:"+Integer.toHexString(sum));
         if(sum==sum2){
             ret = true;
         }

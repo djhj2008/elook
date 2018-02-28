@@ -108,45 +108,22 @@ public abstract class DeviceUpdController {
 
     public void saveEasyDev(int id,int batlev,int state){
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        EasyDevice devstate = new EasyDevice();
-        devstate.setDeviceAutoId(id);
-        devstate.setDeviceDevStateSub(0);
-        devstate.setDeviceBetteryLev(batlev);
-        devstate.setDeviceDevState(state);
         easyDevRepository.updateStatusById(id,state,batlev);
     }
 
-    public void saveDevUplState(int devid,int state){
+    public void saveDevUplState(int id,int state){
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        EasyDevice devstate = new EasyDevice();
-        devstate.setDeviceDeviceId(devid);
-        devstate.setDeviceUplState(state);
-        easyDevRepository.save(devstate);
+        easyDevRepository.updateUplById(id,state);
     }
 
-    public void saveDevErrPic(int devid,int batlev,int state,String path){
+    public void saveDevErrPic(int id,int batlev,int state,String path){
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        EasyDevice devstate = new EasyDevice();
-        devstate.setDeviceDeviceId(devid);
-        devstate.setDeviceDevStateSub(0);
-        devstate.setDeviceBetteryLev(batlev);
-        devstate.setDeviceDevState(state);
-        devstate.setDeviceDevUrlErrpic(path);
-        easyDevRepository.save(devstate);
+        easyDevRepository.updateErrPicById(id,state,batlev,path);
     }
 
-    public void saveDevFull(int devid,int batlev,int state,String path,int tmp_value,int led_type,int led_lev){
+    public void saveDevFull(int id,int batlev,int state,String path,int tmp_value,int led_type,int led_lev){
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        EasyDevice devstate = new EasyDevice();
-        devstate.setDeviceDeviceId(devid);
-        devstate.setDeviceDevStateSub(0);
-        devstate.setDeviceBetteryLev(batlev);
-        devstate.setDeviceDevState(state);
-        devstate.setDeviceDevUrlPic(path);
-        devstate.setDeviceTmpValue(tmp_value);
-        devstate.setDeviceLedType(led_type);
-        devstate.setDeviceLedLevel(led_lev);
-        easyDevRepository.save(devstate);
+        easyDevRepository.updateDevFull(id,state,batlev,path,tmp_value,led_type,led_lev);
     }
 
     public void saveAccess(int devid,int value){
@@ -168,10 +145,10 @@ public abstract class DeviceUpdController {
         easyAccessRepository.save(easyAccess);
     }
 
-    public void saveAccessUrl(int id,String url){
+    public void saveAccessUrl(EasyAccess easyAccess,String url){
         EasyAccessRepository easyAccessRepository = (EasyAccessRepository) StartupEvent.getBean(EasyAccessRepository.class);
-        EasyAccess easyAccess = new EasyAccess();
-        easyAccess.setAccessAutoId(id);
+        //EasyAccess easyAccess = new EasyAccess();
+        //easyAccess.setAccessAutoId(id);
         int time = (int)(System.currentTimeMillis()/1000);
         easyAccess.setAccessTime(time);
         easyAccess.setAccessNewUrl(url);
@@ -222,16 +199,16 @@ public abstract class DeviceUpdController {
         return ret;
     }
 
-    public int findTopAccessId(int sn){
-        int id = 0;
+    public EasyAccess findTopAccess(int sn){
+        EasyAccess ea = null;
         EasyAccessRepository easyAccessRepository = (EasyAccessRepository) StartupEvent.getBean(EasyAccessRepository.class);
         List<EasyAccess> list = easyAccessRepository.findTop1ByAccessDeviceIdOrderByAccessTimeDesc(devid);
         if(list.isEmpty()){
 
         }else{
-            id =list.get(0).getAccessAutoId();
+            ea =list.get(0);
         }
-        return id;
+        return ea;
     }
 
     public int findTopAccessInt(int sn){

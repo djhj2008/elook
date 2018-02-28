@@ -32,6 +32,7 @@ public class SwpWinServer extends  WinServerInterface{
             int sn = load_swp_sn(frame);
             int cmd = load_cmd(frame);
             //SwpWindows mSwpWindow=win_map.get(sn);
+            log.debug("get ACK:"+AckNum);
 
             mSwpWindow.reSwpWindows(sn, MaxNum, AckNum,cmd);
 
@@ -76,6 +77,7 @@ public class SwpWinServer extends  WinServerInterface{
                 requestAck(ctx, packet, mSwpWindow.getSeqNum(), save_ack,sn,cmd);
                 log.debug("nfe:" + nfe);
                 if (mSwpWindow.RevDone()) {
+                    log.debug("RevDone.");
                     byte[] msg = mSwpWindow.getMsg();
                     String ret = null;
                     if (cmd == ElookCmdUrl.SENDJPG) {

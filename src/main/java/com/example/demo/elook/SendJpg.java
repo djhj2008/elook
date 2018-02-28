@@ -1,5 +1,6 @@
 package com.example.demo.elook;
 
+import com.example.demo.mod.EasyAccess;
 import com.example.demo.mod.EasyDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ public class SendJpg extends DeviceUpdController{
         int delay = dev.getDeviceUpDelay();
         int delay_sub = dev.getDeviceUpDelaySub();
         int upl_state = dev.getDeviceUplState();
+        int id =dev.getDeviceAutoId();
         int tmp_value;
 
         if(type == 0 ||type == 1){
@@ -57,9 +59,10 @@ public class SendJpg extends DeviceUpdController{
             if(filename!=null&&!filename.isEmpty()) {
                 String[] cmd = {".\\bin\\pic_decode.exe",filename,"tmp.bmp"};
                 ArrayList<String> result = SmallPicDecode(cmd);
-                if(result!=null) {
+                if(result.size()>0) {
                     String strconf;
                     int index = result.size();
+                    log.debug("result size:"+index);
                     int deviceType = parseDeviceType(result.get(index-1));
                     if(deviceType == DEVICE_TYPE_DIGIT) {
                         byte[] bmpall = HexString2Byte(result.get(index - 3));
@@ -85,17 +88,17 @@ public class SendJpg extends DeviceUpdController{
                     res_led = Integer.valueOf(strled);
 
                     if(res_led!=led){
-                        saveEasyDev(devid,batlev,EasyDeviceInfo.DEVSTATE_DEV_LED_CORRECT);
+                        saveEasyDev(id,batlev,EasyDeviceInfo.DEVSTATE_DEV_LED_CORRECT);
                     }else {
                         int led_type = res_led;
                         int led_lev = Integer.valueOf(strconf.substring(1, 2));
-                        saveDevFull(devid, batlev, EasyDeviceInfo.DEVSTATE_DEV_CONFIG_MIS, path, tmp_value, led_type, led_lev);
+                        saveDevFull(id, batlev, EasyDeviceInfo.DEVSTATE_DEV_CONFIG_MIS, path, tmp_value, led_type, led_lev);
                     }
                     return getResultStrConfig(delay,delay_sub,strconf);
                 }else{
                     //解析失败
                     String errfilename = saveErrJpgPic(msg, devid);
-                    saveDevErrPic(devid,batlev,EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
+                    saveDevErrPic(id,batlev,EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
                     return getResultStr(true,delay,delay_sub);
                 }
             }
@@ -105,8 +108,10 @@ public class SendJpg extends DeviceUpdController{
                 saveDevUplState(devid,upl_state);
             }
             String filename = saveNormalJpgPic(msg,devid);
-            int id = findTopAccessId(devid);
-            saveAccessUrl(id,filename);
+            EasyAccess ea = findTopAccess(devid);
+            if(ea !=null) {
+                saveAccessUrl(ea, filename);
+            }
             return getNormalResultStr(delay,delay_sub);
         }else{
             //Nothing TODO
