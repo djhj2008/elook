@@ -49,7 +49,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
 
         packet.content().getBytes(0,buf);
 
-        for(int i=0;i<16;i++){
+        for(int i=0;i<len;i++){
             log.debug(i+":0x" + Integer.toHexString(buf[i]));
         }
         mSwHandler.deliverSWP(ctx, packet, buf);
