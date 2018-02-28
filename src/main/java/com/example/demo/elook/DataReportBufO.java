@@ -31,7 +31,7 @@ public class DataReportBufO extends DeviceUpdController{
     }
 
     @Override
-    public String DeviceUpdCtrlHandle(byte[] msg) {
+    public String DeviceUpdCtrlHandle(byte[] msg,int length) {
         String ret="";
         int devid = getDevid();
         int sn_c = parseDevId(msg);

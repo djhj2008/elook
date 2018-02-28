@@ -24,7 +24,7 @@ public class BmpValueConfBufO extends DeviceUpdController{
 
 
     @Override
-    public String DeviceUpdCtrlHandle(byte[] msg) {
+    public String DeviceUpdCtrlHandle(byte[] msg,int length) {
         String ret="";
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);

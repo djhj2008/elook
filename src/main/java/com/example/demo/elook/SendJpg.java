@@ -33,7 +33,7 @@ public class SendJpg extends DeviceUpdController{
     }
 
     @Override
-    public String DeviceUpdCtrlHandle(byte[] msg) {
+    public String DeviceUpdCtrlHandle(byte[] msg,int length) {
         String ret=null;
         int devid = getDevid();
         int sn_c = parseDevId(msg);
@@ -53,7 +53,7 @@ public class SendJpg extends DeviceUpdController{
         int tmp_value;
 
         if(type == 0 ||type == 1){
-            String filename = saveJpgPic(msg,devid);
+            String filename = saveJpgPic(msg,length,devid);
             int path_index = filename.lastIndexOf(File.separator);
             String path =filename.substring(0,path_index);
             if(filename!=null&&!filename.isEmpty()) {
@@ -75,7 +75,7 @@ public class SendJpg extends DeviceUpdController{
                             tmp_value = preParseAccessValue(str_num);
                         } else {
                             //解析失败
-                            String errfilename = saveErrJpgPic(msg, devid);
+                            String errfilename = saveErrJpgPic(msg,length,devid);
                             saveDevErrPic(devid,batlev,EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
                             return getResultStr(true,delay,delay_sub);
                         }
@@ -97,7 +97,7 @@ public class SendJpg extends DeviceUpdController{
                     return getResultStrConfig(delay,delay_sub,strconf);
                 }else{
                     //解析失败
-                    String errfilename = saveErrJpgPic(msg, devid);
+                    String errfilename = saveErrJpgPic(msg,length, devid);
                     saveDevErrPic(id,batlev,EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
                     return getResultStr(true,delay,delay_sub);
                 }
@@ -107,7 +107,7 @@ public class SendJpg extends DeviceUpdController{
                 upl_state = 0;
                 saveDevUplState(devid,upl_state);
             }
-            String filename = saveNormalJpgPic(msg,devid);
+            String filename = saveNormalJpgPic(msg,length,devid);
             EasyAccess ea = findTopAccess(devid);
             if(ea !=null) {
                 saveAccessUrl(ea, filename);
@@ -129,28 +129,28 @@ public class SendJpg extends DeviceUpdController{
         return dateString;
     }
 
-    public String saveJpgPic(byte[] msg,int devid) {
+    public String saveJpgPic(byte[] msg,int length,int devid) {
         String path = new File("normalup").getAbsolutePath();
         path += File.separator+devid+File.separator+getPicDir();
         log.debug("path:"+path);
-        return saveJpgPicPath(msg,devid,path);
+        return saveJpgPicPath(msg,length,devid,path);
     }
 
-    public String saveNormalJpgPic(byte[] msg,int devid) {
+    public String saveNormalJpgPic(byte[] msg,int length,int devid) {
         String path = new File("normalup").getAbsolutePath();
         path += File.separator+devid+File.separator;
         log.debug("path:"+path);
-        return saveJpgPicPath(msg,devid,path);
+        return saveJpgPicPath(msg,length,devid,path);
     }
 
-    public String saveErrJpgPic(byte[] msg,int devid) {
+    public String saveErrJpgPic(byte[] msg,int length,int devid) {
         String path = new File("errorup").getAbsolutePath();
         path += File.separator+devid+File.separator+getPicDir();
         log.debug("path:"+path);
-        return saveJpgPicPath(msg,devid,path);
+        return saveJpgPicPath(msg,length,devid,path);
     }
 
-    public String saveJpgPicPath(byte[] msg,int devid,String path) {
+    public String saveJpgPicPath(byte[] msg,int length,int devid,String path) {
         OutputStream os = null;
         String fileName = null;
         File tempFile = new File(path);
@@ -162,7 +162,7 @@ public class SendJpg extends DeviceUpdController{
             fileName=tempFile.getPath() + File.separator+getPicName()+".jpg";
             log.debug("file:"+fileName);
             os = new FileOutputStream(fileName);
-            os.write(msg, IMG_START,msg.length-IMG_START);
+            os.write(msg, IMG_START,length-IMG_START);
 
         } catch (IOException e) {
             e.printStackTrace();

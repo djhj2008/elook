@@ -51,11 +51,11 @@ public class SingleWinServer extends WinServerInterface{
         }
         else if(cmd == ElookCmdUrl.BMP_VALUECONF){
             BmpValueConf bvc = new BmpValueConf(sn,cmd);
-            ret = bvc.DeviceUpdCtrlHandle(msg);
+            ret = bvc.DeviceUpdCtrlHandle(msg,len);
         }
         else if(cmd == ElookCmdUrl.DATA_REPORT){
             DataReport dr = new DataReport(sn,cmd);
-            ret = dr.DeviceUpdCtrlHandle(msg);
+            ret = dr.DeviceUpdCtrlHandle(msg,len);
         }
         if(ret!=null&&!ret.isEmpty()){
             requestAckString(ctx, packet,sn,cmd,ret);

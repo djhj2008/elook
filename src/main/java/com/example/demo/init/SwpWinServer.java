@@ -77,42 +77,43 @@ public class SwpWinServer extends  WinServerInterface{
                 requestAck(ctx, packet, mSwpWindow.getSeqNum(), save_ack,sn,cmd);
                 log.debug("nfe:" + nfe);
                 if (mSwpWindow.RevDone()) {
-                    log.debug("RevDone.");
                     byte[] msg = mSwpWindow.getMsg();
+                    int length = mSwpWindow.getMsg_cursor();
                     String ret = null;
+                    log.debug("RevDone length:"+length);
                     if (cmd == ElookCmdUrl.SENDJPG) {
                         SendJpg sendjpg = new SendJpg(sn,cmd);
-                        ret = sendjpg.DeviceUpdCtrlHandle(msg);
+                        ret = sendjpg.DeviceUpdCtrlHandle(msg,length);
 
                     }
                     else if(cmd == ElookCmdUrl.BMP_VALUECONF_BUF){
                         BmpValueConfBuf bvcf = new BmpValueConfBuf(sn,cmd);
-                        ret = bvcf.DeviceUpdCtrlHandle(msg);
+                        ret = bvcf.DeviceUpdCtrlHandle(msg,length);
 
                     }
                     else if(cmd == ElookCmdUrl.BMP_VALUECONF_BUF_OLD){
                         BmpValueConfBufO bvcfo = new BmpValueConfBufO(sn,cmd);
-                        ret = bvcfo.DeviceUpdCtrlHandle(msg);
+                        ret = bvcfo.DeviceUpdCtrlHandle(msg,length);
 
                     }
                     else if(cmd == ElookCmdUrl.BMP_VALUECONF){
                         BmpValueConf bvc = new BmpValueConf(sn,cmd);
-                        ret = bvc.DeviceUpdCtrlHandle(msg);
+                        ret = bvc.DeviceUpdCtrlHandle(msg,length);
 
                     }
                     else if(cmd == ElookCmdUrl.DATA_REPORT_BUF){
                         DataReportBuf drb = new DataReportBuf(sn,cmd);
-                        ret = drb.DeviceUpdCtrlHandle(msg);
+                        ret = drb.DeviceUpdCtrlHandle(msg,length);
 
                     }
                     else if(cmd == ElookCmdUrl.DATA_REPORT_BUF_OLD){
                         DataReportBufO drbo = new DataReportBufO(sn,cmd);
-                        ret = drbo.DeviceUpdCtrlHandle(msg);
+                        ret = drbo.DeviceUpdCtrlHandle(msg,length);
 
                     }
                     else if(cmd == ElookCmdUrl.DATA_REPORT){
                         DataReport dr = new DataReport(sn,cmd);
-                        ret = dr.DeviceUpdCtrlHandle(msg);
+                        ret = dr.DeviceUpdCtrlHandle(msg,length);
 
                     }
                     if(ret!=null&&!ret.isEmpty()){

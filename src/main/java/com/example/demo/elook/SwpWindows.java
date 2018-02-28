@@ -20,7 +20,7 @@ public class SwpWindows {
     final static short SWP_WIN_FLAG_DONE = 2;
     final static short SWP_WIN_FLAG_FULL = 3;
 
-    final static short REV_WIN_MAX = 30;
+    final static short REV_WIN_MAX = 50;
     final static short REV_WIN_SIZE = 512;
     final static short REV_MSG_WIN_MAX = 64;
 
@@ -83,6 +83,10 @@ public class SwpWindows {
 
     public byte[] getMsg(){
         return msg;
+    }
+
+    public int getMsg_cursor(){
+        return msg_cursor;
     }
 
     public String getPicName(){
@@ -167,8 +171,8 @@ public class SwpWindows {
                 msg_cursor += slot_len[index];
             }
             Nfe++;
+            //log.debug("msg_cursor:"+msg_cursor);
         }
-
         mFlag = SWP_WIN_FLAG_FULL;
 
         if(Nfe==mSeqNum){

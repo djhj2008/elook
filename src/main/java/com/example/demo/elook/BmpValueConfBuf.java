@@ -18,7 +18,7 @@ public class BmpValueConfBuf extends DeviceUpdController{
     }
 
     @Override
-    public String DeviceUpdCtrlHandle(byte[] msg) {
+    public String DeviceUpdCtrlHandle(byte[] msg,int length) {
         String ret=null;
         int devid = getDevid();
         int sn_c = parseDevId(msg);

@@ -37,7 +37,7 @@ public abstract class DeviceUpdController {
         this.cmd = cmd;
     }
 
-    abstract public String DeviceUpdCtrlHandle(byte[] msg);
+    abstract public String DeviceUpdCtrlHandle(byte[] msg,int length);
 
     public int getDevid() {
         return devid;
@@ -282,9 +282,9 @@ public abstract class DeviceUpdController {
     public int parseDevId(byte[] msg){
         byte[] sn_buf = new byte[SN_LEN];
         System.arraycopy(msg,DATA_START,sn_buf,0,SN_LEN);
-        for(int i=0;i<SN_LEN;i++){
-            log.debug(""+sn_buf[i]);
-        }
+//        for(int i=0;i<SN_LEN;i++){
+//            log.debug(""+sn_buf[i]);
+//        }
         String sn_str =new String(sn_buf);
         log.debug(sn_str);
         int sn_c = Integer.valueOf(sn_str);
