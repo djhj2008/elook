@@ -30,11 +30,10 @@ public class SwpWinServer extends  WinServerInterface{
             MaxNum = (short) (frame[1] & 0xFF);
             AckNum = (short) (frame[2] & 0xFF);
             int sn = load_swp_sn(frame);
-            this.sn=sn;
-
+            int cmd = load_cmd(frame);
             //SwpWindows mSwpWindow=win_map.get(sn);
 
-            mSwpWindow.reSwpWindows(sn, MaxNum, AckNum, ElookCmdUrl.SENDJPG);
+            mSwpWindow.reSwpWindows(sn, MaxNum, AckNum,cmd);
 
             int len = load_swp_data_len(frame);
 
@@ -54,7 +53,7 @@ public class SwpWinServer extends  WinServerInterface{
                 }
                 if(mSwpWindow.swpWinDrop()) {
                     log.debug("Send ACK:" + save_ack);
-                    requestAck(ctx, packet, mSwpWindow.getSeqNum(), save_ack);
+                    requestAck(ctx, packet, mSwpWindow.getSeqNum(), save_ack,sn,cmd);
                 }
                 return;
             }
@@ -74,10 +73,9 @@ public class SwpWinServer extends  WinServerInterface{
                 }else{
                     save_ack = 0xff;
                 }
-                requestAck(ctx, packet, mSwpWindow.getSeqNum(), save_ack);
+                requestAck(ctx, packet, mSwpWindow.getSeqNum(), save_ack,sn,cmd);
                 log.debug("nfe:" + nfe);
                 if (mSwpWindow.RevDone()) {
-                    int cmd = mSwpWindow.getCmd();
                     byte[] msg = mSwpWindow.getMsg();
                     String ret = null;
                     if (cmd == ElookCmdUrl.SENDJPG) {
@@ -124,15 +122,6 @@ public class SwpWinServer extends  WinServerInterface{
             }
             mListener.listener(sn,"ACK");
         }
-    }
-
-
-    private void requestAck(ChannelHandlerContext ctx,DatagramPacket packet,short max ,short nfe){
-        byte[] ack = new byte[3];
-        ack[0] = 'a';
-        ack[1] = (byte)(max&0xff);
-        ack[2] = (byte)(nfe&0xff);
-        ctx.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer(ack,0,3), packet.sender()));
     }
 
 }

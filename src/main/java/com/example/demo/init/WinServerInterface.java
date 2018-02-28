@@ -65,10 +65,20 @@ public abstract class WinServerInterface {
         return len;
     }
 
+    public void requestAck(ChannelHandlerContext ctx,DatagramPacket packet,short max ,short nfe,int sn,int cmd){
+        byte[] ack = new byte[CMD_END];
+        ack[0] = 'a';
+        ack[1] = (byte)(max&0xff);
+        ack[2] = (byte)(nfe&0xff);
+        System.arraycopy(intToByte(sn),0,ack,SN_START,SN_LEN);
+        ack[CMD_START] = (byte)(cmd&0xff);
+        ctx.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer(ack,0,CMD_END), packet.sender()));
+    }
+
     public void requestAckString(ChannelHandlerContext ctx, DatagramPacket packet, int sn, int cmd, String str){
         int len = str.getBytes().length;
         byte[] ack = new byte[DSTART+len+CHECK_SUM_LEN];
-        ack[0] = 'a';
+        ack[0] = 'd';
         ack[1] = 0x01;
         ack[2] = 0x01;
         System.arraycopy(intToByte(sn),0,ack,SN_START,SN_LEN);

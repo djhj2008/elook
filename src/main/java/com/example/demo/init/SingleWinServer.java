@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SingleWinServer extends WinServerInterface{
     private static final Logger log= LoggerFactory.getLogger(SingleWinServer.class);
+    public static final short SINGLE_WIN = 1;
 
     @Async("myTaskAsyncPool")
     public void run(ChannelHandlerContext ctx, DatagramPacket packet, byte[] frame) {
@@ -20,7 +21,9 @@ public class SingleWinServer extends WinServerInterface{
         String ret = null;
         log.debug("CMD:"+cmd);
 
-        SingleWindow mSingleWindow = new SingleWindow(sn,ElookCmdUrl.GET_DEVSTATE);
+        requestAck(ctx, packet, SINGLE_WIN, SINGLE_WIN,sn,cmd);
+
+        SingleWindow mSingleWindow = new SingleWindow(sn,cmd);
         int len = load_swp_data_len(frame);
         if(len > 0) {
             if (checkSum(frame, DSTART, len) == true) {
@@ -49,12 +52,10 @@ public class SingleWinServer extends WinServerInterface{
         else if(cmd == ElookCmdUrl.BMP_VALUECONF){
             BmpValueConf bvc = new BmpValueConf(sn,cmd);
             ret = bvc.DeviceUpdCtrlHandle(msg);
-
         }
         else if(cmd == ElookCmdUrl.DATA_REPORT){
             DataReport dr = new DataReport(sn,cmd);
             ret = dr.DeviceUpdCtrlHandle(msg);
-
         }
         if(ret!=null&&!ret.isEmpty()){
             requestAckString(ctx, packet,sn,cmd,ret);
