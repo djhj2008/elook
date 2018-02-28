@@ -81,8 +81,8 @@ public class SendJpg extends DeviceUpdController{
                         }
                     }else{
                         strconf = result.get(index-3);
-                        strconf = strconf.substring(strconf.length()-4);
-                        tmp_value = Integer.valueOf(strconf);
+                        String value_str = strconf.substring(strconf.length()-4);
+                        tmp_value = Integer.valueOf(value_str);
                     }
                     String strled = strconf.substring(0,1);
                     res_led = Integer.valueOf(strled);
@@ -91,7 +91,7 @@ public class SendJpg extends DeviceUpdController{
                         saveEasyDev(id,batlev,EasyDeviceInfo.DEVSTATE_DEV_LED_CORRECT);
                     }else {
                         int led_type = res_led;
-                        int led_lev = Integer.valueOf(strconf.substring(1, 2));
+                        int led_lev = Integer.valueOf(strconf.substring(1, 3));
                         saveDevFull(id, batlev, EasyDeviceInfo.DEVSTATE_DEV_CONFIG_MIS, path, tmp_value, led_type, led_lev);
                     }
                     return getResultStrConfig(delay,delay_sub,strconf);
@@ -185,8 +185,11 @@ public class SendJpg extends DeviceUpdController{
     private int parseDeviceType(String strType){
         int ret = 0;
         String prefix = "iType=";
+        log.debug(strType);
         if(strType.startsWith(prefix)) {
-            String str = strType.substring(prefix.length(), 1);
+            int begin = prefix.length();
+            int end = begin+1;
+            String str = strType.substring(begin, end);
             ret = Integer.valueOf(str);
         }
         return ret;

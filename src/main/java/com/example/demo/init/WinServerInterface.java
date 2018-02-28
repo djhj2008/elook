@@ -96,7 +96,7 @@ public abstract class WinServerInterface {
     public static byte[] intToByte(int number) {
         int temp = number;
         byte[] b = new byte[4];
-        for (int i = 0; i < b.length; i++) {
+        for (int i = b.length-1; i >=0; i--){
             b[i] = new Integer(temp & 0xff).byteValue();
             temp = temp >> 8; // 向右移8位
             //log.debug("buf:"+Integer.toHexString(b[i]));
@@ -107,7 +107,7 @@ public abstract class WinServerInterface {
     public static byte[] shortToByte(short number) {
         int temp = number;
         byte[] b = new byte[2];
-        for (int i = 0; i < b.length; i++) {
+        for (int i = b.length-1; i >=0; i--) {
             b[i] = new Integer(temp & 0xff).byteValue();
             temp = temp >> 8; // 向右移8位
             //log.debug("buf:"+Integer.toHexString(b[i]));

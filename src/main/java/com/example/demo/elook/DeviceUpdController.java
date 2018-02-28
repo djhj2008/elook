@@ -165,7 +165,11 @@ public abstract class DeviceUpdController {
             if(exitcode == 0) {
                 String line = null;
                 while ((line = br.readLine()) != null) {
-                    res.add(line);
+                    byte[] tmp = line.getBytes();
+                    if(tmp.length>0){
+                        log.debug(line);
+                        res.add(line);
+                    }
                 }
             }else{
                 return null;
@@ -193,7 +197,9 @@ public abstract class DeviceUpdController {
         }
 
         for(int i=0;i<buf.length()/2;i++){
-            String substr= buf.substring(i*2,2);
+            int begin = i*2;
+            int end = begin+2;
+            String substr= buf.substring(begin,end);
             ret[i]=Byte.decode("0x"+substr);
         }
         return ret;
@@ -247,9 +253,9 @@ public abstract class DeviceUpdController {
             String[] sub_str = new String[NUM_COUNT];
             String value_str = "";
             for(int i=0;i<NUM_COUNT;i++){
-                sub_str[i] = str_num.substring(i,1);
+                sub_str[i] = str_num.substring(i,i+1);
                 if(sub_str[i].equals("a")){
-                    sub_str[i]=pre_value_str.substring(i,1);
+                    sub_str[i]=pre_value_str.substring(i,i+1);
                 }
                 value_str+=sub_str[i];
             }
@@ -311,7 +317,7 @@ public abstract class DeviceUpdController {
     public String getNormalResultStr(int delay,int delay_sub){
         String ret = null;
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
         String dateString = formatter.format(currentTime);
         dateString += String.format("%02d", delay) + String.format("%04d", delay_sub);
         return "OK"+dateString;
@@ -320,7 +326,7 @@ public abstract class DeviceUpdController {
     public String getResultStr(boolean state,int delay,int delay_sub){
         String ret = null;
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
         String dateString = formatter.format(currentTime);
         String delay_str =  String.format("%02d", delay) + String.format("%04d", delay_sub);
         log.debug(delay_str);
@@ -335,7 +341,7 @@ public abstract class DeviceUpdController {
     public String getResultStr(boolean state,int delay,int delay_sub,int led_type,int led_lev){
         String ret = null;
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
         String dateString = formatter.format(currentTime);
         dateString += String.format("%02d", delay) + String.format("%04d", delay_sub);
         if(state) {
@@ -349,7 +355,7 @@ public abstract class DeviceUpdController {
     public String getResultStrConfig(int delay,int delay_sub,String conf){
         String ret = null;
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
         String dateString = formatter.format(currentTime);
         dateString += String.format("%02d", delay) + String.format("%04d", delay_sub);
         return PASS2_STR+dateString+conf;
