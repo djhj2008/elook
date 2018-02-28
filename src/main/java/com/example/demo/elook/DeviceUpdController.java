@@ -78,7 +78,7 @@ public abstract class DeviceUpdController {
 
     public String savePicsPath(int count, int width, int height, byte[] bmpall, int offset, String path) {
         File tempFile = new File(path);
-        log.debug("path:" + path);
+        //log.debug("path:" + path);
         if (!tempFile.exists()) {
             tempFile.mkdirs();
         }
@@ -86,8 +86,11 @@ public abstract class DeviceUpdController {
             OutputStream os = null;
             try {
                 String fileName = i + ".bmp";
-                log.debug("file:" + fileName);
-                os = new FileOutputStream(tempFile.getPath() + File.separator + fileName);
+                File fd = new File(tempFile.getPath() + File.separator + fileName);
+                //log.debug("file:" + fd.getPath());
+                log.debug("file:" + fd.getName());
+                //log.debug("file:" + fd.getParent());
+                os = new FileOutputStream(fd);
                 BMPWriter bmpwrier = new BMPWriter(width,height);
                 bmpwrier.savebmpTop(os);
                 bmpwrier.savebmpInfo(os);
@@ -190,6 +193,8 @@ public abstract class DeviceUpdController {
 
     public byte[] HexString2Byte(String buf){
         byte[] ret=null;
+        log.debug(buf);
+        log.debug("len:"+buf.length());
         if(buf.length()%2!=0){
             return null;
         }else{
@@ -238,7 +243,7 @@ public abstract class DeviceUpdController {
         }else{
             pre_value =list.get(0).getAccessValue();
         }
-        String value_str = String.format("%5d",pre_value);
+        String value_str = String.format("%05d",pre_value);
         return value_str;
     }
 

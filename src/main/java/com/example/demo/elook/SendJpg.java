@@ -54,8 +54,8 @@ public class SendJpg extends DeviceUpdController{
 
         if(type == 0 ||type == 1){
             String filename = saveJpgPic(msg,length,devid);
-            int path_index = filename.lastIndexOf(File.separator);
-            String path =filename.substring(0,path_index);
+            File fd = new File(filename);
+            String path =fd.getParent();
             if(filename!=null&&!filename.isEmpty()) {
                 String[] cmd = {".\\bin\\pic_decode.exe",filename,"tmp.bmp"};
                 ArrayList<String> result = SmallPicDecode(cmd);
@@ -69,10 +69,12 @@ public class SendJpg extends DeviceUpdController{
                         strconf = result.get(index-4);
                         savePicsPath(BMP_COUT, SMALL_PIC_WIDTH, SMALL_PIC_HEIGHT, bmpall, 0, path);
                         String[] cmd2 = {".\\bin\\pic_decode_new.exe", path};
-                        ArrayList<String> result2 = SmallPicDecode(cmd);
+                        ArrayList<String> result2 = SmallPicDecode(cmd2);
                         if (result2 != null) {
-                            String str_num = result.get(0);
+                            String str_num = result2.get(0);
+                            log.debug("preParseValue:"+str_num);
                             tmp_value = preParseAccessValue(str_num);
+                            log.debug("tmp_value:"+tmp_value);
                         } else {
                             //解析失败
                             String errfilename = saveErrJpgPic(msg,length,devid);
@@ -86,7 +88,7 @@ public class SendJpg extends DeviceUpdController{
                     }
                     String strled = strconf.substring(0,1);
                     res_led = Integer.valueOf(strled);
-
+                    log.debug("res_led:"+res_led+" led"+led);
                     if(res_led!=led){
                         saveEasyDev(id,batlev,EasyDeviceInfo.DEVSTATE_DEV_LED_CORRECT);
                     }else {

@@ -119,6 +119,7 @@ public class SwpWinServer extends  WinServerInterface{
                     if(ret!=null&&!ret.isEmpty()){
                         requestAckString(ctx, packet,sn,cmd,ret);
                     }
+                    mListener.listener(sn,"DONE");
                 }
                 mListener.listener(sn,"FULL");
                 return;

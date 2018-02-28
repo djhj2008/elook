@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table
 public class EasyAccess {
     @Column(name = "access_autoid")
-    private int accessAutoId;
+    private int accessAutoid;
 
     @Column(name = "access_device_id")
     private int accessDeviceId;
@@ -23,12 +23,12 @@ public class EasyAccess {
 
     @Id
     @GeneratedValue
-    public int getAccessAutoId() {
-        return accessAutoId;
+    public int getAccessAutoid() {
+        return accessAutoid;
     }
 
-    public void setAccessAutoId(int accessAutoId) {
-        this.accessAutoId = accessAutoId;
+    public void setAccessAutoid(int accessAutoid) {
+        this.accessAutoid = accessAutoid;
     }
 
     public int getAccessDeviceId() {
