@@ -116,6 +116,10 @@ public class SwpWinServer extends  WinServerInterface{
                         ret = dr.DeviceUpdCtrlHandle(msg,length);
 
                     }
+                    else if(cmd == ElookCmdUrl.LOGS){
+                        SaveLog sl = new SaveLog(sn,cmd);
+                        ret = sl.DeviceUpdCtrlHandle(msg,length);
+                    }
                     if(ret!=null&&!ret.isEmpty()){
                         requestAckString(ctx, packet,sn,cmd,ret);
                     }

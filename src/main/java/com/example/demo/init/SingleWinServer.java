@@ -35,7 +35,7 @@ public class SingleWinServer extends WinServerInterface{
                 return;
             }
         }
-
+        log.debug("len:"+len);
         byte[] msg = mSingleWindow.getSlot();
 
         if(cmd ==ElookCmdUrl.GET_DEVSTATE){
@@ -56,6 +56,10 @@ public class SingleWinServer extends WinServerInterface{
         else if(cmd == ElookCmdUrl.DATA_REPORT){
             DataReport dr = new DataReport(sn,cmd);
             ret = dr.DeviceUpdCtrlHandle(msg,len);
+        }
+        else if(cmd == ElookCmdUrl.LOGS){
+            SaveLog sl = new SaveLog(sn,cmd);
+            ret = sl.DeviceUpdCtrlHandle(frame,frame.length);
         }
         if(ret!=null&&!ret.isEmpty()){
             requestAckString(ctx, packet,sn,cmd,ret);

@@ -38,7 +38,7 @@ public class SaveLog extends DeviceUpdController{
         OutputStream os = null;
         String fileName = null;
         File tempFile = new File(path);
-        log.debug("path:"+path);
+        log.debug("path:"+path+" len:"+length);
         try {
             if (!tempFile.exists()) {
                 tempFile.mkdirs();
