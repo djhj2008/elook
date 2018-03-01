@@ -76,6 +76,7 @@ public abstract class WinServerInterface {
     }
 
     public void requestAckString(ChannelHandlerContext ctx, DatagramPacket packet, int sn, int cmd, String str){
+        log.debug(str);
         int len = str.getBytes().length;
         byte[] ack = new byte[DSTART+len+CHECK_SUM_LEN];
         ack[0] = 'd';

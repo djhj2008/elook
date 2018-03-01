@@ -303,7 +303,15 @@ public abstract class DeviceUpdController {
     }
 
     public int parseBatLev(byte[] msg){
-        return msg[BATLEVL_START];
+        return parseCharValue(msg[BATLEVL_START]&0xff);
+    }
+
+    public int parseCharValue(int num){
+        int ret = 0;
+        char tmp = (char) num;
+        String str = String.valueOf(tmp);
+        ret = Integer.valueOf(str);
+        return ret;
     }
 
     public static int formatDate(String dateStr, String format){

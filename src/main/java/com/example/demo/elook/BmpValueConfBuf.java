@@ -35,7 +35,7 @@ public class BmpValueConfBuf extends DeviceUpdController{
         if(path!=null&&!path.isEmpty()) {
             String[] cmd = {".\\bin\\pic_decode_new.exe",path};
             ArrayList<String> result = SmallPicDecode(cmd);
-            if(result!=null) {
+            if(result!=null&&result.size()>0) {
                 String str_num = result.get(0);
                 value = preParseAccessValue(str_num);
             }

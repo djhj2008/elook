@@ -5,6 +5,7 @@ import com.example.demo.mod.EasyDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,9 +39,13 @@ public class SendJpg extends DeviceUpdController{
         int devid = getDevid();
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
-        int type = msg[TYPE_START]&0xff;
-        int led  = msg[LED_START]&0xff;
+        int type = parseCharValue(msg[TYPE_START]&0xff);
+        int led  = parseCharValue( msg[LED_START]&0xff);
         int res_led;
+
+        log.debug("batlev:"+batlev);
+        log.debug("type:"+type);
+        log.debug("led:"+led);
 
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){
@@ -59,7 +64,7 @@ public class SendJpg extends DeviceUpdController{
             if(filename!=null&&!filename.isEmpty()) {
                 String[] cmd = {".\\bin\\pic_decode.exe",filename,"tmp.bmp"};
                 ArrayList<String> result = SmallPicDecode(cmd);
-                if(result.size()>0) {
+                if(result!=null&&result.size()>0) {
                     String strconf;
                     int index = result.size();
                     log.debug("result size:"+index);
@@ -182,7 +187,6 @@ public class SendJpg extends DeviceUpdController{
         return fileName;
 
     }
-
 
     private int parseDeviceType(String strType){
         int ret = 0;
