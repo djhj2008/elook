@@ -15,6 +15,7 @@ import static java.lang.Thread.sleep;
 
 public class SwpWindows {
     private static final Logger log = LoggerFactory.getLogger(SwpWindows.class);
+    final static boolean DEBUG = false;
     final static short SWP_WIN_FLAG_NORMAL = 0;
     final static short SWP_WIN_FLAG_RECEIVE = 1;
     final static short SWP_WIN_FLAG_DONE = 2;
@@ -89,55 +90,6 @@ public class SwpWindows {
         return msg_cursor;
     }
 
-    public String getPicName(){
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String dateString = formatter.format(currentTime);
-        Random rand=new Random();
-        int rdm=(int)(Math.random()*(9999-1000+1)+1000);
-        dateString=dateString+"_"+rdm;
-        return dateString;
-    }
-
-    public String getPicDir(){
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-        String dateString = formatter.format(currentTime);
-        return dateString;
-    }
-
-
-    public void savePic() {
-        OutputStream os = null;
-        try {
-            String path = new File("").getAbsolutePath();
-            path += File.separator+mSn+File.separator+getPicDir();
-            File tempFile = new File(path);
-            log.debug("path:"+path);
-            if (!tempFile.exists()) {
-                tempFile.mkdirs();
-            }
-            String fileName=getPicName()+".jpg";
-            log.debug("file:"+fileName);
-            os = new FileOutputStream(tempFile.getPath() + File.separator + fileName);
-            os.write(msg, 0, msg_cursor);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // 完毕，关闭所有链接
-            try {
-                os.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-
     public int getState(){
         return mFlag;
     }
@@ -159,7 +111,9 @@ public class SwpWindows {
         //boolean send_flag=true;
         for(int i=0;i<REV_WIN_MAX;i++){
             int index = Nfe%REV_WIN_MAX;
-            log.debug("Nfe:"+Nfe+" index:"+index);
+            if(DEBUG) {
+                log.debug("Nfe:" + Nfe + " index:" + index);
+            }
             if(slot_flag[index]==false){
                 if(Nfe==0){
                     //send_flag=false;
@@ -188,7 +142,9 @@ public class SwpWindows {
     }
 
     public void resetSwpWin(){
-        log.debug("Reset Win.");
+        if(DEBUG) {
+            log.debug("Reset Win.");
+        }
         Nfe = 0;
         msg_cursor = 0;
         dcount = 0;
@@ -209,7 +165,9 @@ public class SwpWindows {
         }
         for (int i = start; i < start+sum; i++){
             int index = i%REV_WIN_MAX;
-            log.debug("slot"+index+":"+slot_flag[index]);
+            if(DEBUG) {
+                log.debug("slot" + index + ":" + slot_flag[index]);
+            }
             if (slot_flag[index] == false){
                 ret = false;
                 break;
@@ -227,7 +185,9 @@ public class SwpWindows {
         System.arraycopy(frame,offset,slot[index],0,len);
         slot_flag[index]=true;
         mFlag = SWP_WIN_FLAG_RECEIVE;
-        log.debug("ack:"+mAckNum+" index:"+index);
+        if(DEBUG) {
+            log.debug("ack:" + mAckNum + " index:" + index);
+        }
         return ret;
     }
 

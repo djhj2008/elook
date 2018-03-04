@@ -36,7 +36,7 @@ public abstract class WinServerInterface {
         return ret;
     }
 
-    public int load_swp_sn(byte[] frame){
+    public static int load_swp_sn(byte[] frame){
         int sn = 0;
         sn = frame[SN_START + 3 ] & 0xff;
         //log.debug("sn:"+Integer.toHexString(sn));
@@ -46,14 +46,14 @@ public abstract class WinServerInterface {
         //log.debug("sn:"+Integer.toHexString(sn));
         sn = sn | ((frame[SN_START] & 0xff) << 24 & 0xffffffff);
         //log.debug("sn:"+Integer.toHexString(sn));
-        log.debug("sn:"+sn);
+        //log.debug("sn:"+sn);
         return sn;
     }
 
-    public int load_cmd(byte[] frame){
+    public static int load_cmd(byte[] frame){
         int cmd = 0;
         cmd = frame[SN_END] & 0xff;
-        log.debug("cmd:"+cmd);
+        //log.debug("cmd:"+cmd);
         return cmd;
     }
 

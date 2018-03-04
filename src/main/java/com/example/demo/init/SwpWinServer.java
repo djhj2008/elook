@@ -17,7 +17,7 @@ import static java.lang.Thread.sleep;
 @Component
 public class SwpWinServer extends  WinServerInterface{
     private static final Logger log= LoggerFactory.getLogger(SwpWinServer.class);
-    int sn;
+    final static boolean DEBUG = false;
     short MaxNum;
     short AckNum;
     SwpWinListener mListener;
@@ -31,21 +31,29 @@ public class SwpWinServer extends  WinServerInterface{
             AckNum = (short) (frame[2] & 0xFF);
             int sn = load_swp_sn(frame);
             int cmd = load_cmd(frame);
-            //SwpWindows mSwpWindow=win_map.get(sn);
-            log.debug("get ACK:"+AckNum);
+
+            if(DEBUG) {
+                log.debug("get ACK:" + AckNum);
+            }
+            log.debug("sn:"+sn+" ack:"+AckNum+" nfe:"+MaxNum);
+            mListener.listener(sn,"ACK");
 
             mSwpWindow.reSwpWindows(sn, MaxNum, AckNum,cmd);
 
             int len = load_swp_data_len(frame);
 
-            log.debug("data len:"+len);
+            if(DEBUG) {
+                log.debug("data len:" + len);
+            }
 
             if (len == 0||len > 512-DSTART) {
                 return;
             }
 
             if (mSwpWindow.swpInWindow() == false) {
-                log.debug("Drop ACK:"+AckNum+" NFE:"+mSwpWindow.getNFE());
+                if(DEBUG) {
+                    log.debug("Drop ACK:" + AckNum + " NFE:" + mSwpWindow.getNFE());
+                }
                 short save_ack = 0;
                 if (mSwpWindow.getNFE() > 0){
                     save_ack = (short)(mSwpWindow.getNFE()-1);
@@ -53,7 +61,9 @@ public class SwpWinServer extends  WinServerInterface{
                     save_ack = 0xff;
                 }
                 if(mSwpWindow.swpWinDrop()) {
-                    log.debug("Send ACK:" + save_ack);
+                    if(DEBUG) {
+                        log.debug("Send ACK:" + save_ack);
+                    }
                     requestAck(ctx, packet, mSwpWindow.getSeqNum(), save_ack,sn,cmd);
                 }
                 return;
@@ -62,11 +72,15 @@ public class SwpWinServer extends  WinServerInterface{
             if (mSwpWindow.checkSum(frame, DSTART, len) == true) {
                 mSwpWindow.saveSlotMsg(frame, DSTART, len);
             } else {
-                log.debug("checkSum error!");
+                //if(DEBUG) {
+                    log.debug("checkSum error!");
+                //}
             }
             //requestAckString(ctx,packet,"test:"+AckNum);
             if (mSwpWindow.swpInWindowFull() == true) {
-                log.debug("WindowFull.");
+                if(DEBUG) {
+                    log.debug("WindowFull.");
+                }
                 short nfe = mSwpWindow.fillMsg();
                 short save_ack = 0;
                 if (nfe > 0){
@@ -75,12 +89,16 @@ public class SwpWinServer extends  WinServerInterface{
                     save_ack = 0xff;
                 }
                 requestAck(ctx, packet, mSwpWindow.getSeqNum(), save_ack,sn,cmd);
-                log.debug("nfe:" + nfe);
+                if(DEBUG) {
+                    log.debug("nfe:" + nfe);
+                }
                 if (mSwpWindow.RevDone()) {
                     byte[] msg = mSwpWindow.getMsg();
                     int length = mSwpWindow.getMsg_cursor();
                     String ret = null;
-                    log.debug("RevDone length:"+length);
+                    //if(DEBUG) {
+                        log.debug("sn:"+sn+" RevDone length:" + length);
+                    //}
                     if (cmd == ElookCmdUrl.SENDJPG) {
                         SendJpg sendjpg = new SendJpg(sn,cmd);
                         ret = sendjpg.DeviceUpdCtrlHandle(msg,length);
@@ -124,11 +142,12 @@ public class SwpWinServer extends  WinServerInterface{
                         requestAckString(ctx, packet,sn,cmd,ret);
                     }
                     mListener.listener(sn,"DONE");
+                    return;
                 }
                 mListener.listener(sn,"FULL");
                 return;
             }
-            mListener.listener(sn,"ACK");
+
         }
     }
 

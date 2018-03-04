@@ -1,22 +1,11 @@
 package com.example.demo.handle;
 
-import com.example.demo.elook.SwpWinHandler;
-import com.example.demo.init.StartupEvent;
-import com.example.demo.mod.EasyDevice;
-import com.example.demo.mod.UdpRecord;
-import com.example.demo.repository.mysql.EasyDevRepository;
-import com.example.demo.repository.mysql.UdpRepository;
-import com.example.demo.repository.redis.RedisRepository;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.util.CharsetUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.List;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -30,9 +19,6 @@ import java.util.Date;
 public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
     private static final Logger log= LoggerFactory.getLogger(UdpServerHandler.class);
-
-    //用来计算server接收到多少UDP消息
-    private static int count = 0;
 
     SwpWinHandler mSwHandler = new SwpWinHandler();
 
@@ -53,41 +39,6 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
 //            log.debug(i+":0x" + Integer.toHexString(buf[i]));
 //        }
         mSwHandler.deliverSWP(ctx, packet, buf);
-
-/*
-        int sn = 110000005;
-        //for (int i=0;i<5;i++) {
-            log.debug("count:"+count);
-            byte[] tmpbuf = new byte[16];
-            tmpbuf[0] = 'd';
-            tmpbuf[1] = 5;
-            tmpbuf[2] = (byte)count;
-            byte[] bufsn;
-            bufsn = intToByte(sn);
-            System.arraycopy(bufsn, 0, tmpbuf, 3, 4);
-            tmpbuf[7] = 7;
-            byte[] buflen;
-            buflen = shortToByte((short) 5);
-            System.arraycopy(buflen, 0, tmpbuf, 8, 2);
-            tmpbuf[10] = 0x64;
-            tmpbuf[11] = 0x64;
-            tmpbuf[12] = 0x64;
-            tmpbuf[13] = 0x64;
-            tmpbuf[14] = 0x64;
-            tmpbuf[15] = (byte)0xf4;
-            mSwHandler.deliverSWP(ctx, packet, tmpbuf);
-            count++;
-            if(count >4) {
-                count = 0;
-                sn++;
-            }
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        //}
-*/
 
 //        UdpRecord udpRecord = new UdpRecord();
 //
