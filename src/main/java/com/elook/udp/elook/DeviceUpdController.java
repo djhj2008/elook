@@ -29,6 +29,8 @@ public abstract class DeviceUpdController {
     private final int SN_LEN      = 9;
     public final int BATLEVL_START = DATA_START+SN_LEN;
     public final int BATLEVL_LEN = 1;
+    public final int TEMP_START = BATLEVL_START+BATLEVL_LEN;
+    public final int TEMP_LEN = 1;
     public final int NUM_COUNT = 5;
 
 
@@ -304,6 +306,11 @@ public abstract class DeviceUpdController {
 
     public int parseBatLev(byte[] msg){
         return parseCharValue(msg[BATLEVL_START]&0xff);
+    }
+
+    public int parseTemp(byte[] msg){
+        log.debug("temp:"+msg[TEMP_START]);
+        return msg[TEMP_START];
     }
 
     public int parseCharValue(int num){

@@ -21,7 +21,7 @@ public class SendJpg extends DeviceUpdController {
     private final int SMALL_PIC_WIDTH = 12;
     private final int SMALL_PIC_HEIGHT = 18;
 
-    private final int TYPE_START = BATLEVL_START+BATLEVL_LEN;
+    private final int TYPE_START = TEMP_START+TEMP_LEN;
     private final int TYPE_LEN = 1;
     private final int LED_START = TYPE_START+TYPE_LEN;
     private final int LED_LEN = 1;
@@ -39,6 +39,7 @@ public class SendJpg extends DeviceUpdController {
         int batlev = parseBatLev(msg);
         int type = parseCharValue(msg[TYPE_START]&0xff);
         int led  = parseCharValue( msg[LED_START]&0xff);
+        int temp = parseTemp(msg);
         int res_led;
 
         log.debug("batlev:"+batlev);

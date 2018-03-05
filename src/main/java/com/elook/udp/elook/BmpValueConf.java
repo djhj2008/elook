@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class BmpValueConf extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(BmpValueConf.class);
-    private int VALUE_START = BATLEVL_START+BATLEVL_LEN;
+    private int VALUE_START = TEMP_START+TEMP_LEN;
 
     public BmpValueConf(int sn, int cmd) {
         super(sn, cmd);
@@ -17,6 +17,10 @@ public class BmpValueConf extends DeviceUpdController {
         String ret="";
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
+        int temp = parseTemp(msg);
+
+        log.debug("batlev:"+batlev);
+
         int devid = getDevid();
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){

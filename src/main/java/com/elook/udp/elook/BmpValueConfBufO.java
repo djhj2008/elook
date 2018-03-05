@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class BmpValueConfBufO extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(BmpValueConfBufO.class);
-    private final int RADIUS_START = BATLEVL_START+BATLEVL_LEN;
+    private final int RADIUS_START = TEMP_START+TEMP_LEN;
     private final int RADIUS_LEN  = 1;
     private final int WIDTH_START = RADIUS_START+RADIUS_LEN;
     private final int WIDTH_LEN   = 1;
@@ -28,6 +28,7 @@ public class BmpValueConfBufO extends DeviceUpdController {
         String ret="";
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
+        int temp = parseTemp(msg);
         int devid = getDevid();
 
         int radius = msg[RADIUS_START]&0xff;

@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class DataReportBuf extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(DataReportBuf.class);
-    private final int BMP_START = BATLEVL_START+BATLEVL_LEN;
+    private final int BMP_START = TEMP_START+TEMP_LEN;
     private final int BMP_COUNT = 5;
     private final int SMALL_BMP_WIDTH = 12;
     private final int SMALL_BMP_HEIGHT = 18;
@@ -26,6 +26,7 @@ public class DataReportBuf extends DeviceUpdController {
         int devid = getDevid();
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
+        int temp = parseTemp(msg);
 
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){

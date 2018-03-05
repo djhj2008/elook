@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class DataReport extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(DataReport.class);
-    private int COUNT_START = BATLEVL_START+BATLEVL_LEN;
+    private int COUNT_START = TEMP_START+TEMP_LEN;
     private int COUNT_LEN = 1;
     private int VALUE_START = COUNT_START+COUNT_LEN;
     private int VALUE_LEN = 4;
@@ -23,6 +23,8 @@ public class DataReport extends DeviceUpdController {
         int devid = getDevid();
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
+        int temp = parseTemp(msg);
+
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){
             return null;

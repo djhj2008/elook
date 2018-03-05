@@ -2,6 +2,7 @@ package com.elook.udp.init;
 
 import com.elook.udp.elook.*;
 import com.elook.udp.handle.SwpWinListener;
+import com.elook.udp.handle.SwpWindows;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class SwpWinServer extends WinServerInterface {
     SwpWinListener mListener;
 
     @Async("myTaskAsyncPool")
-    public void run(ChannelHandlerContext ctx, DatagramPacket packet, byte[] frame,SwpWindows mSwpWindow,SwpWinListener mListener) {
+    public void run(ChannelHandlerContext ctx, DatagramPacket packet, byte[] frame, SwpWindows mSwpWindow, SwpWinListener mListener) {
         synchronized (this)
         {
             this.mListener=mListener;

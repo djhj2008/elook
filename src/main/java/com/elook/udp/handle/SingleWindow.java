@@ -1,14 +1,14 @@
-package com.elook.udp.elook;
+package com.elook.udp.handle;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.elook.udp.elook.EasyDeviceInfo;
 import com.elook.udp.init.StartupEvent;
 import com.elook.udp.mod.EasyDevice;
 import com.elook.udp.repository.mysql.EasyDevRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.orm.jpa.JpaSystemException;
 
 public class SingleWindow {
     private static final Logger log = LoggerFactory.getLogger(SingleWindow.class);
@@ -68,7 +68,7 @@ public class SingleWindow {
 
         //}
         if(state == 0){
-            easyDevRepository.updateStatusByDevId(sn,EasyDeviceInfo.DEVSTATE_HAS_CONNECT_SERVER);
+            easyDevRepository.updateStatusByDevId(sn, EasyDeviceInfo.DEVSTATE_HAS_CONNECT_SERVER);
         }
 
         list = easyDevRepository.findDeviceDevStateByDeviceDeviceId(sn);

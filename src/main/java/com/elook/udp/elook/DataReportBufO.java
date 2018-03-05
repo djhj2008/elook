@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class DataReportBufO extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(DataReportBufO.class);
-    private final int RADIUS_START = BATLEVL_START+BATLEVL_LEN;
+    private final int RADIUS_START = TEMP_START+TEMP_LEN;
     private final int RADIUS_LEN  = 1;
     private final int WIDTH_START = RADIUS_START+RADIUS_LEN;
     private final int WIDTH_LEN   = 1;
@@ -31,6 +31,7 @@ public class DataReportBufO extends DeviceUpdController {
         int devid = getDevid();
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
+        int temp = parseTemp(msg);
 
         int radius = msg[RADIUS_START]&0xff;
         int width = msg[WIDTH_START]&0xff;
