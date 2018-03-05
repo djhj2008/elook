@@ -110,7 +110,7 @@ public class SendJpg extends DeviceUpdController {
         }else if(type == 2){
             if(upl_state == 1){
                 upl_state = 0;
-                saveDevUplState(devid,upl_state);
+                saveDevUplState(id,upl_state);
             }
             String filename = saveNormalJpgPic(msg,length,devid);
             EasyAccess ea = findTopAccess(devid);

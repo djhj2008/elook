@@ -56,7 +56,7 @@ public class SingleWinServer extends WinServerInterface{
             DataReport dr = new DataReport(sn,cmd);
             ret = dr.DeviceUpdCtrlHandle(msg,len);
         }
-        else if(cmd == ElookCmdUrl.LOGS){
+        else if(cmd == ElookCmdUrl.LOGS||cmd == ElookCmdUrl.DATA_REPORT_ERROR_BUF_OLD){
             SaveLog sl = new SaveLog(sn,cmd);
             ret = sl.DeviceUpdCtrlHandle(frame,frame.length);
         }

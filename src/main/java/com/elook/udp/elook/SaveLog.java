@@ -19,7 +19,12 @@ public class SaveLog extends DeviceUpdController {
 
     @Override
     public String DeviceUpdCtrlHandle(byte[] msg, int length) {
-        String filename = saveLogs(msg,length,getDevid());
+        String filename =null;
+        if(getCmd()==ElookCmdUrl.LOGS) {
+            filename = saveLogs(msg, length, getDevid());
+        }else{
+
+        }
         return "OK0"+filename;
     }
 
@@ -66,7 +71,7 @@ public class SaveLog extends DeviceUpdController {
     }
 
     public String saveLogs(byte[] msg,int length,int devid) {
-        String path = new File("normalup").getAbsolutePath();
+        String path = new File("errlog").getAbsolutePath();
         path += File.separator+devid+File.separator+getPicDir();
         log.debug("path:"+path);
         return saveLogsPath(msg,length,devid,path);

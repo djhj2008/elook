@@ -131,7 +131,7 @@ public class SwpWinServer extends WinServerInterface {
                         ret = dr.DeviceUpdCtrlHandle(msg,length);
 
                     }
-                    else if(cmd == ElookCmdUrl.LOGS){
+                    else if(cmd == ElookCmdUrl.LOGS||cmd == ElookCmdUrl.DATA_REPORT_ERROR_BUF_OLD){
                         SaveLog sl = new SaveLog(sn,cmd);
                         ret = sl.DeviceUpdCtrlHandle(msg,length);
                     }
