@@ -57,16 +57,27 @@ public class SingleWindow {
         int state=-1;
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
         //try {
-            List<EasyDevice> list = easyDevRepository.findDeviceDevStateByDeviceDeviceId(sn);
-            for(int i=0;i<list.size();i++) {
-                log.debug(i+":" + list.get(i).toString());
-            }
-            if(!list.isEmpty()){
-                state=list.get(0).getDeviceDevState();
-            }
+        List<EasyDevice> list = easyDevRepository.findDeviceDevStateByDeviceDeviceId(sn);
+        for(int i=0;i<list.size();i++) {
+            log.debug(i+":" + list.get(i).toString());
+        }
+        if(!list.isEmpty()){
+            state=list.get(0).getDeviceDevState();
+        }
         //}catch (JpaSystemException e){
 
         //}
+        if(state == 0){
+            easyDevRepository.updateStatusByDevId(sn,EasyDeviceInfo.DEVSTATE_HAS_CONNECT_SERVER);
+        }
+
+        list = easyDevRepository.findDeviceDevStateByDeviceDeviceId(sn);
+        for(int i=0;i<list.size();i++) {
+            log.debug(i+":" + list.get(i).toString());
+        }
+        if(!list.isEmpty()){
+            state=list.get(0).getDeviceDevState();
+        }
 
         return state;
     }

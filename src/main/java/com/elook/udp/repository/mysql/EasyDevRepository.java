@@ -15,6 +15,12 @@ public interface EasyDevRepository extends JpaRepository<EasyDevice,Integer> {
     @Modifying(clearAutomatically = true)
     @Query(value = "update easy_device ed set " +
             "ed.device_dev_state=?2 " +
+            "where ed.device_device_id = ?1",nativeQuery = true)
+    int updateStatusByDevId(int devid,int state);
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update easy_device ed set " +
+            "ed.device_dev_state=?2 " +
             ",ed.device_bettery_lev=?3 " +
             "where ed.device_auto_id = ?1",nativeQuery = true)
     int updateStatusById(int auto_id,int state,int bat_lev);
@@ -35,7 +41,7 @@ public interface EasyDevRepository extends JpaRepository<EasyDevice,Integer> {
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update easy_device ed set " +
-            "ed.device_upl_state=?2 "+
+            "ed.device_dev_state=?2 "+
             " ,ed.device_bettery_lev=?3"+
             " ,ed.device_dev_url_pic=?4 "+
             " ,ed.device_tmp_value=?5 "+
