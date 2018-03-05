@@ -56,7 +56,7 @@ public class SingleWindow {
     public int getDevState(int sn){
         int state=-1;
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        try {
+        //try {
             List<EasyDevice> list = easyDevRepository.findDeviceDevStateByDeviceDeviceId(sn);
             for(int i=0;i<list.size();i++) {
                 log.debug(i+":" + list.get(i).toString());
@@ -64,9 +64,9 @@ public class SingleWindow {
             if(!list.isEmpty()){
                 state=list.get(0).getDeviceDevState();
             }
-        }catch (JpaSystemException e){
+        //}catch (JpaSystemException e){
 
-        }
+        //}
 
         return state;
     }
