@@ -15,7 +15,7 @@ import static java.lang.Thread.sleep;
 
 public class SwpWindows {
     private static final Logger log = LoggerFactory.getLogger(SwpWindows.class);
-    final static boolean DEBUG = false;
+    final static boolean DEBUG = true;
     final static short SWP_WIN_FLAG_NORMAL = 0;
     final static short SWP_WIN_FLAG_RECEIVE = 1;
     final static short SWP_WIN_FLAG_DONE = 2;

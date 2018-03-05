@@ -14,7 +14,7 @@ import static java.lang.Thread.sleep;
 @Component
 public class SwpWinServer extends WinServerInterface {
     private static final Logger log= LoggerFactory.getLogger(SwpWinServer.class);
-    final static boolean DEBUG = false;
+    final static boolean DEBUG = true;
     short MaxNum;
     short AckNum;
     SwpWinListener mListener;
