@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/learning_udp.iml" filepath="$PROJECT_DIR$/learning_udp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/elook_udp_server.iml" filepath="$PROJECT_DIR$/elook_udp_server.iml" />
     </modules>
   </component>
 </project>

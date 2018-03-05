@@ -4,7 +4,7 @@
                xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback
                http://ch.qos.logback/xml/ns/logback/logback.xsd
                http://ch.qos.logback/xml/ns/logback ">
-	<property name="APP_Name" value="udplearning" />
+	<property name="APP_Name" value="elookserver" />
 	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" />
 	<contextName>${APP_Name}</contextName>
 	
@@ -34,7 +34,7 @@
     </encoder>   
   </appender>
   
-	<logger name="com.example.demo" level="debug" additivity="false">
+	<logger name="com.elook.udp" level="debug" additivity="false">
 		<appender-ref ref="STDOUT" />  
 		<appender-ref ref="FILELOG" />
 	</logger>
