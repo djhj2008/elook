@@ -18,7 +18,7 @@ public class SingleWinServer extends WinServerInterface{
         int sn = load_swp_sn(frame);
         int cmd = load_cmd(frame);
         String ret = null;
-        log.debug("CMD:"+cmd);
+        log.debug("SN:"+sn+" CMD:"+cmd);
 
         requestAck(ctx, packet, SINGLE_WIN, SINGLE_WIN,sn,cmd);
 
