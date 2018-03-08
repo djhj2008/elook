@@ -57,7 +57,7 @@ public class DataReportBuf extends DeviceUpdController {
         saveAccess(devid,value);
 
         if(upl == 0){
-            ret = getResultStr(true,delay,delay_sub,led_type,led_lev);
+            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
         }else{
             ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
         }

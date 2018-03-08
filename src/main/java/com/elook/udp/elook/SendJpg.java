@@ -23,7 +23,7 @@ public class SendJpg extends DeviceUpdController {
 
     private final int TYPE_START = TEMP_START+TEMP_LEN;
     private final int TYPE_LEN = 1;
-    private final int LED_START = TYPE_START+TYPE_LEN;
+    private final int  LED_START = TYPE_START+TYPE_LEN;
     private final int LED_LEN = 1;
     private final int IMG_START = LED_START+LED_LEN;
 
@@ -136,21 +136,21 @@ public class SendJpg extends DeviceUpdController {
     }
 
     public String saveJpgPic(byte[] msg,int length,int devid) {
-        String path = new File("normalup").getAbsolutePath();
+        String path = new File(NORMAL_PATH).getAbsolutePath();
         path += File.separator+devid+File.separator+getPicDir();
         log.debug("path:"+path);
         return saveJpgPicPath(msg,length,devid,path);
     }
 
     public String saveNormalJpgPic(byte[] msg,int length,int devid) {
-        String path = new File("normalup").getAbsolutePath();
+        String path = new File(NORMAL_PATH).getAbsolutePath();
         path += File.separator+devid+File.separator;
         log.debug("path:"+path);
         return saveJpgPicPath(msg,length,devid,path);
     }
 
     public String saveErrJpgPic(byte[] msg,int length,int devid) {
-        String path = new File("errorup").getAbsolutePath();
+        String path = new File(ERROR_PATH).getAbsolutePath();
         path += File.separator+devid+File.separator+getPicDir();
         log.debug("path:"+path);
         return saveJpgPicPath(msg,length,devid,path);

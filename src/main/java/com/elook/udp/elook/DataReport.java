@@ -24,7 +24,9 @@ public class DataReport extends DeviceUpdController {
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
         int temp = parseTemp(msg);
-
+        for(int i=0;i<length;i++){
+            log.debug(i+":0x" + Integer.toHexString(msg[i]));
+        }
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){
             return null;
@@ -36,6 +38,7 @@ public class DataReport extends DeviceUpdController {
         int led_lev = dev.getDeviceLedLevel();
 
         int count = msg[COUNT_START];
+        log.debug("count:"+count);
         for(int i=0;i<count;i++){
             int time;
             if(i==count-1){
@@ -53,7 +56,7 @@ public class DataReport extends DeviceUpdController {
         saveEasyDev(devid,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
 
         if(upl == 0){
-            ret = getResultStr(true,delay,delay_sub,led_type,led_lev);
+            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
         }else{
             ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
         }

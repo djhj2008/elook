@@ -55,9 +55,9 @@ public class DataReportBufO extends DeviceUpdController {
             String[] cmd = {".\\bin\\pic_old_decode.exe",path,""+radius,""+width,""+height,""+angle};
             ArrayList<String> result = SmallPicDecode(cmd);
             if(result!=null&&result.size()>0) {
-                String str_num = result.get(0);
+                String str_num = result.get(2);
                 if(!str_num.isEmpty()){
-                    value = preParseAccessValue(str_num);
+                    value = preParseAccessValueOld(str_num);
                 }
             }
         }
@@ -69,7 +69,7 @@ public class DataReportBufO extends DeviceUpdController {
         saveAccess(devid,value);
 
         if(upl == 0){
-            ret = getResultStr(true,delay,delay_sub,led_type,led_lev);
+            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
         }else{
             ret = getResultStr(false,delay,delay_sub,led_type,led_lev);;
         }

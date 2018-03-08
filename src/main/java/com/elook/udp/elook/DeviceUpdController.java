@@ -24,6 +24,9 @@ public abstract class DeviceUpdController {
     private String PASS_STR = "OK1";
     private String FAIL_STR = "OK2";
     private String PASS2_STR = "OK0";
+    public String NORMAL_PATH = "E:\\amp\\Apache24\\htdocs\\NBIOT\\normalup";
+    public String NORMAL_DIR = "normalup";
+    public String ERROR_PATH = "E:\\amp\\Apache24\\htdocs\\NBIOT\\errorup";
 
     private final int DATA_START  = 0;
     private final int SN_LEN      = 9;
@@ -72,7 +75,7 @@ public abstract class DeviceUpdController {
     }
 
     public String savePicS(int count, int width, int height, byte[] bmpall, int offset) {
-        String path = new File("normalup").getAbsolutePath();
+        String path = new File(NORMAL_PATH).getAbsolutePath();
         path += File.separator + devid + File.separator + getPicDir();
         log.debug("path:" + path);
         return savePicsPath(count,width,height,bmpall,offset,path);
@@ -122,11 +125,17 @@ public abstract class DeviceUpdController {
     }
 
     public void saveDevErrPic(int id,int batlev,int state,String path){
+        int index = path.lastIndexOf(NORMAL_DIR);
+        path = path.substring(index,path.length());
+        path = path.replace("\\","/");
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
         easyDevRepository.updateErrPicById(id,state,batlev,path);
     }
 
     public void saveDevFull(int id,int batlev,int state,String path,int tmp_value,int led_type,int led_lev){
+        int index = path.lastIndexOf(NORMAL_DIR);
+        path = path.substring(index,path.length());
+        path = path.replace("\\","/");
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
         easyDevRepository.updateDevFull(id,state,batlev,path,tmp_value,led_type,led_lev);
     }
@@ -150,13 +159,16 @@ public abstract class DeviceUpdController {
         easyAccessRepository.save(easyAccess);
     }
 
-    public void saveAccessUrl(EasyAccess easyAccess,String url){
+    public void saveAccessUrl(EasyAccess easyAccess,String path){
+        int index = path.lastIndexOf(NORMAL_DIR);
+        path = path.substring(index,path.length());
+        path = path.replace("\\","/");
         EasyAccessRepository easyAccessRepository = (EasyAccessRepository) StartupEvent.getBean(EasyAccessRepository.class);
         //EasyAccess easyAccess = new EasyAccess();
         //easyAccess.setAccessAutoId(id);
         int time = (int)(System.currentTimeMillis()/1000);
         easyAccess.setAccessTime(time);
-        easyAccess.setAccessNewUrl(url);
+        easyAccess.setAccessNewUrl(path);
         easyAccessRepository.save(easyAccess);
     }
 
@@ -271,7 +283,18 @@ public abstract class DeviceUpdController {
         return value;
     }
 
-
+    public int preParseAccessValueOld(String str_num){
+        int ret = 0;
+        String prefix = "digital after : ";
+        log.debug(str_num);
+        if(str_num.startsWith(prefix)) {
+            int begin = prefix.length();
+            int end = str_num.length();
+            String str = str_num.substring(begin, end);
+            ret = Integer.valueOf(str.trim());
+        }
+        return ret;
+    }
 
     public EasyDevice findEasyDev(int sn){
         EasyDevice dev = null;
