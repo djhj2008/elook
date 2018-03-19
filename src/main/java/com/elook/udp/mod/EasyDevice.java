@@ -31,6 +31,9 @@ public class EasyDevice {
     @Column(name = "device_upl_state")
     private int deviceUplState;
 
+    @Column(name = "device_rep_type")
+    private int deviceRepType;
+
     @Column(name = "device_up_delay")
     private int deviceUpDelay;
 
@@ -113,6 +116,10 @@ public class EasyDevice {
         return deviceDevUrlErrpic;
     }
 
+    public int getDeviceRepType() {
+        return deviceRepType;
+    }
+
     public void setDeviceAutoId(int deviceAutoId) {
         this.deviceAutoId = deviceAutoId;
     }
@@ -169,6 +176,9 @@ public class EasyDevice {
         this.deviceDevUrlErrpic = deviceDevUrlErrpic;
     }
 
+    public void setDeviceRepType(int deviceRepType) {
+        this.deviceRepType = deviceRepType;
+    }
     public String toString()
     {
         return "id:"+deviceAutoId+" devid:"+deviceDeviceId+" state:"+deviceDevState+" tmp_value:"+deviceTmpValue;

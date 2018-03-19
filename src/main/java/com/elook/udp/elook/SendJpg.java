@@ -54,6 +54,7 @@ public class SendJpg extends DeviceUpdController {
         int delay_sub = dev.getDeviceUpDelaySub();
         int upl_state = dev.getDeviceUplState();
         int id =dev.getDeviceAutoId();
+        int rep_type = dev.getDeviceRepType();
         int tmp_value;
 
         if(type == 0 ||type == 1){
@@ -83,7 +84,7 @@ public class SendJpg extends DeviceUpdController {
                             //解析失败
                             String errfilename = saveErrJpgPic(msg,length,devid);
                             saveDevErrPic(devid,batlev, EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
-                            return getResultStr(true,delay,delay_sub);
+                            return getResultStr(rep_type,true,delay,delay_sub);
                         }
                     }else{
                         strconf = result.get(index-3);
@@ -100,12 +101,12 @@ public class SendJpg extends DeviceUpdController {
                         int led_lev = Integer.valueOf(strconf.substring(1, 3));
                         saveDevFull(id, batlev, EasyDeviceInfo.DEVSTATE_DEV_CONFIG_MIS, path, tmp_value, led_type, led_lev);
                     }
-                    return getResultStrConfig(delay,delay_sub,strconf);
+                    return getResultStrConfig(rep_type,delay,delay_sub,strconf);
                 }else{
                     //解析失败
                     String errfilename = saveErrJpgPic(msg,length, devid);
                     saveDevErrPic(id,batlev,EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
-                    return getResultStr(true,delay,delay_sub);
+                    return getResultStr(rep_type,true,delay,delay_sub);
                 }
             }
         }else if(type == 2){
@@ -118,7 +119,7 @@ public class SendJpg extends DeviceUpdController {
             if(ea !=null) {
                 saveAccessUrl(ea, filename);
             }
-            return getNormalResultStr(delay,delay_sub);
+            return getNormalResultStr(rep_type,delay,delay_sub);
         }else{
             //Nothing TODO
         }

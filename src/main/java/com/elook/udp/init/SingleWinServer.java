@@ -40,11 +40,12 @@ public class SingleWinServer extends WinServerInterface{
 
         if(cmd == ElookCmdUrl.GET_DEVSTATE){
             int state = mSingleWindow.getDevState(sn);
+            int rep_type = mSingleWindow.getDevRepType(sn);
             log.debug("state:"+state);
             if(state == 10){
-                ret = "OKA";
+                ret = "OKA"+rep_type;
             }else if(state>=0 && state < 10){
-                ret = "OK"+state;
+                ret = "OK"+state+rep_type;
             }else{
                 ret = "OKE";
             }

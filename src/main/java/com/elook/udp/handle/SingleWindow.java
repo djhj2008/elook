@@ -81,4 +81,18 @@ public class SingleWindow {
 
         return state;
     }
+
+    public int getDevRepType(int sn){
+        int state=-1;
+        EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
+        //try {
+        List<EasyDevice> list = easyDevRepository.findDeviceRepTypeByDeviceDeviceId(sn);
+        for(int i=0;i<list.size();i++) {
+            log.debug(i+":" + list.get(i).toString());
+        }
+        if(!list.isEmpty()){
+            state=list.get(0).getDeviceRepType();
+        }
+        return state;
+    }
 }

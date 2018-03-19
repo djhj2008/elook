@@ -36,6 +36,7 @@ public class DataReport extends DeviceUpdController {
         int upl = dev.getDeviceUplState();
         int led_type = dev.getDeviceLedType();
         int led_lev = dev.getDeviceLedLevel();
+        int rep_type = dev.getDeviceRepType();
 
         int count = msg[COUNT_START];
         log.debug("count:"+count);
@@ -56,9 +57,9 @@ public class DataReport extends DeviceUpdController {
         saveEasyDev(devid,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
 
         if(upl == 0){
-            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
+            ret = getResultStr(rep_type,false,delay,delay_sub,led_type,led_lev);
         }else{
-            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
+            ret = getResultStr(rep_type,false,delay,delay_sub,led_type,led_lev);
         }
         return ret;
     }

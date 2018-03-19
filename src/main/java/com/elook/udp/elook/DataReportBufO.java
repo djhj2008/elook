@@ -48,6 +48,7 @@ public class DataReportBufO extends DeviceUpdController {
         int upl = dev.getDeviceUplState();
         int led_type = dev.getDeviceLedType();
         int led_lev = dev.getDeviceLedLevel();
+        int rep_type = dev.getDeviceRepType();
         int value = 0;
 
         String path = savePicS(BMP_COUNT,width,height,msg,BMP_START);
@@ -69,9 +70,9 @@ public class DataReportBufO extends DeviceUpdController {
         saveAccess(devid,value);
 
         if(upl == 0){
-            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);
+            ret = getResultStr(rep_type,false,delay,delay_sub,led_type,led_lev);
         }else{
-            ret = getResultStr(false,delay,delay_sub,led_type,led_lev);;
+            ret = getResultStr(rep_type,false,delay,delay_sub,led_type,led_lev);;
         }
         return ret;
     }

@@ -11,6 +11,7 @@ import java.util.List;
 public interface EasyDevRepository extends JpaRepository<EasyDevice,Integer> {
     List<EasyDevice> findByDeviceDeviceId(int devid);
     List<EasyDevice> findDeviceDevStateByDeviceDeviceId(int devid);
+    List<EasyDevice> findDeviceRepTypeByDeviceDeviceId(int devid);
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update easy_device ed set " +
