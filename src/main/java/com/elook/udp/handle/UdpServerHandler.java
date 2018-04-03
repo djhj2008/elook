@@ -38,6 +38,10 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
 //        for(int i=0;i<len;i++){
 //            log.debug(i+":0x" + Integer.toHexString(buf[i]));
 //        }
+
+        if(buf.length<3){
+            log.debug("recv:"+buf.length+"drop:"+receiveMsg);
+        }
         mSwHandler.deliverSWP(ctx, packet, buf);
 
 //        UdpRecord udpRecord = new UdpRecord();

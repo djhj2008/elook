@@ -43,6 +43,7 @@ public class DataReportBufO extends DeviceUpdController {
         if(dev == null){
             return null;
         }
+        int id =dev.getDeviceAutoId();
         int delay = dev.getDeviceUpDelay();
         int delay_sub = dev.getDeviceUpDelaySub();
         int upl = dev.getDeviceUplState();
@@ -66,7 +67,7 @@ public class DataReportBufO extends DeviceUpdController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String dateString = formatter.format(currentTime);
 
-        saveEasyDev(devid,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
+        saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
         saveAccess(devid,value);
 
         if(upl == 0){

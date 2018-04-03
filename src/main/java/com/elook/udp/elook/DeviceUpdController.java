@@ -125,7 +125,7 @@ public abstract class DeviceUpdController {
     }
 
     public void saveDevErrPic(int id,int batlev,int state,String path){
-        int index = path.lastIndexOf(NORMAL_DIR);
+        int index = path.lastIndexOf(ERROR_PATH);
         path = path.substring(index,path.length());
         path = path.replace("\\","/");
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);

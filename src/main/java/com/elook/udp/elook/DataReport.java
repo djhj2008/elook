@@ -31,6 +31,7 @@ public class DataReport extends DeviceUpdController {
         if(dev == null){
             return null;
         }
+        int id =dev.getDeviceAutoId();
         int delay = dev.getDeviceUpDelay();
         int delay_sub = dev.getDeviceUpDelaySub();
         int upl = dev.getDeviceUplState();
@@ -54,7 +55,7 @@ public class DataReport extends DeviceUpdController {
             saveAccess(devid,value,time);
         }
 
-        saveEasyDev(devid,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
+        saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
 
         if(upl == 0){
             ret = getResultStr(rep_type,false,delay,delay_sub,led_type,led_lev);

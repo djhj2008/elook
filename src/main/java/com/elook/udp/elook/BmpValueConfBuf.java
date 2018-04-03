@@ -29,6 +29,8 @@ public class BmpValueConfBuf extends DeviceUpdController {
         if(dev == null){
             return null;
         }
+
+        int id =dev.getDeviceAutoId();
         int delay = dev.getDeviceUpDelay();
         int delay_sub = dev.getDeviceUpDelaySub();
         int tmp_value = dev.getDeviceTmpValue();
@@ -53,7 +55,7 @@ public class BmpValueConfBuf extends DeviceUpdController {
             state = EasyDeviceInfo.DEVSTATE_CONFIRM_FAIL;
             ret = getResultStr(rep_type,false,delay,delay_sub);
         }
-        saveEasyDev(devid,batlev,state);
+        saveEasyDev(id,batlev,state);
         return ret;
     }
 
