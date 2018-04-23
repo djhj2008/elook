@@ -19,8 +19,8 @@ public class SwpWinHandler{
     final static boolean DEBUG = true;
     final static byte FLAG_HURT_VALID = 'b';
     final static byte FLAG_DATA_VALID = 'd';
-    final static int ACK_TIMEOUT_DELAY = 5000;
-    final static int FULL_TIMEOUT_DELAY = 15000;
+    final static int ACK_TIMEOUT_DELAY = 30000;
+    final static int FULL_TIMEOUT_DELAY = 30000;
     int Revcount = 0;
     SwpHdr hdr;
     Thread tm;
@@ -161,7 +161,7 @@ public class SwpWinHandler{
             }
             while(!isCancel) {
                     try {
-                        Thread.sleep(30000);
+                        Thread.sleep(60000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

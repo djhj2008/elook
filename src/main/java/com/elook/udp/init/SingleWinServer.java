@@ -2,12 +2,16 @@ package com.elook.udp.init;
 
 import com.elook.udp.elook.*;
 import com.elook.udp.handle.SingleWindow;
+import com.elook.udp.mod.EasyDevice;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Component
 public class SingleWinServer extends WinServerInterface{
@@ -39,15 +43,27 @@ public class SingleWinServer extends WinServerInterface{
         byte[] msg = mSingleWindow.getSlot();
 
         if(cmd == ElookCmdUrl.GET_DEVSTATE){
-            int state = mSingleWindow.getDevState(sn);
-            int rep_type = mSingleWindow.getDevRepType(sn);
-            log.debug("state:"+state);
-            if(state == 10){
-                ret = "OKA"+rep_type;
-            }else if(state>=0 && state < 10){
-                ret = "OK"+state+rep_type;
-            }else{
+            EasyDevice dev = mSingleWindow.findEasyDev(sn);
+            if(dev == null){
                 ret = "OKE";
+            }else {
+                int state = dev.getDeviceDevState();
+                int rep_type = dev.getDeviceRepType();
+                int delay = dev.getDeviceUpDelay();
+                int delay_sub = dev.getDeviceUpDelaySub();
+                log.debug("state:" + state);
+                if (state == 10) {
+                    ret = "OKA" + rep_type;
+                } else if (state >= 0 && state < 10) {
+                    ret = "OK" + state + rep_type;
+                } else {
+                    ret = "OKE";
+                }
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+                String dateString = formatter.format(currentTime);
+                String delay_str = String.format("%02d", delay) + String.format("%04d", delay_sub);
+                ret += dateString + delay_str;
             }
         }
         else if(cmd == ElookCmdUrl.BMP_VALUECONF){

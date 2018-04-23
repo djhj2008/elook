@@ -57,7 +57,7 @@ public class SendJpg extends DeviceUpdController {
         int rep_type = dev.getDeviceRepType();
         int tmp_value;
 
-        if(type == 0 ||type == 1){
+        if(type == 0 ||type == 1||type == 3){
             String filename = saveJpgPic(msg,length,devid);
             File fd = new File(filename);
             String path =fd.getParent();
@@ -83,7 +83,7 @@ public class SendJpg extends DeviceUpdController {
                         } else {
                             //解析失败
                             String errfilename = saveErrJpgPic(msg,length,devid);
-                            saveDevErrPic(devid,batlev, EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
+                            saveDevErrPic(id,batlev, EasyDeviceInfo.DEVSTATE_DIG_PARSE_FAIL,errfilename);
                             return getResultStr(rep_type,true,delay,delay_sub);
                         }
                     }else{
@@ -99,7 +99,10 @@ public class SendJpg extends DeviceUpdController {
                     }else {
                         int led_type = res_led;
                         int led_lev = Integer.valueOf(strconf.substring(1, 3));
-                        saveDevFull(id, batlev, EasyDeviceInfo.DEVSTATE_DEV_CONFIG_MIS, path, tmp_value, led_type, led_lev);
+                        saveDevFull(id, batlev, EasyDeviceInfo.DEVSTATE_DEV_CONFIG_MIS, filename, tmp_value, led_type, led_lev);
+                        if(type==3){
+                            saveAccess(devid,tmp_value,filename);
+                        }
                     }
                     return getResultStrConfig(rep_type,delay,delay_sub,strconf);
                 }else{

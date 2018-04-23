@@ -9,6 +9,7 @@ import com.elook.udp.mod.EasyDevice;
 import com.elook.udp.repository.mysql.EasyDevRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.orm.jpa.JpaSystemException;
 
 public class SingleWindow {
     private static final Logger log = LoggerFactory.getLogger(SingleWindow.class);
@@ -94,5 +95,24 @@ public class SingleWindow {
             state=list.get(0).getDeviceRepType();
         }
         return state;
+    }
+
+    public EasyDevice findEasyDev(int sn){
+        EasyDevice dev = null;
+        EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
+        try {
+            List<EasyDevice> list = easyDevRepository.findByDeviceDeviceId(sn);
+            for (int i = 0; i < list.size(); i++) {
+                log.debug(i + ":" + list.get(i).toString());
+            }
+            if (list.isEmpty()) {
+
+            } else {
+                dev = list.get(0);
+            }
+        }catch (JpaSystemException e){
+
+        }
+        return dev;
     }
 }

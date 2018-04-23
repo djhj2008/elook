@@ -27,6 +27,7 @@ public abstract class DeviceUpdController {
     public String NORMAL_PATH = "E:\\amp\\Apache24\\htdocs\\NBIOT\\normalup";
     public String NORMAL_DIR = "normalup";
     public String ERROR_PATH = "E:\\amp\\Apache24\\htdocs\\NBIOT\\errorup";
+    public String ERROR_DIR = "errorup";
 
     private final int DATA_START  = 0;
     private final int SN_LEN      = 9;
@@ -125,7 +126,7 @@ public abstract class DeviceUpdController {
     }
 
     public void saveDevErrPic(int id,int batlev,int state,String path){
-        int index = path.lastIndexOf(ERROR_PATH);
+        int index = path.lastIndexOf(ERROR_DIR);
         path = path.substring(index,path.length());
         path = path.replace("\\","/");
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
@@ -147,6 +148,20 @@ public abstract class DeviceUpdController {
         easyAccess.setAccessValue(value);
         int time = (int)(System.currentTimeMillis()/1000);
         easyAccess.setAccessTime(time);
+        easyAccessRepository.save(easyAccess);
+    }
+
+    public void saveAccess(int devid,int value,String path){
+        EasyAccessRepository easyAccessRepository = (EasyAccessRepository) StartupEvent.getBean(EasyAccessRepository.class);
+        EasyAccess easyAccess = new EasyAccess();
+        int index = path.lastIndexOf(NORMAL_DIR);
+        path = path.substring(index,path.length());
+        path = path.replace("\\","/");
+        easyAccess.setAccessDeviceId(devid);
+        easyAccess.setAccessValue(value);
+        int time = (int)(System.currentTimeMillis()/1000);
+        easyAccess.setAccessTime(time);
+        easyAccess.setAccessNewUrl(path);
         easyAccessRepository.save(easyAccess);
     }
 
