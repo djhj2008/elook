@@ -139,6 +139,9 @@ public class SwpWinServer extends WinServerInterface {
                     else if(cmd == ElookCmdUrl.SAVE_BMP){
                         SaveBmp sb = new SaveBmp(sn,cmd);
                         ret = sb.DeviceUpdCtrlHandle(msg,length);
+                    }else if(cmd == ElookCmdUrl.LOGS2) {
+                        SaveLog2 sl = new SaveLog2(sn,cmd);
+                        ret = sl.DeviceUpdCtrlHandle(msg,length);
                     }
                     if(ret!=null&&!ret.isEmpty()){
                         requestAckString(ctx, packet,sn,cmd,ret);

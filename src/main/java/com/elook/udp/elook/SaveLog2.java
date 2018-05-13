@@ -10,18 +10,18 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class SaveLog extends DeviceUpdController {
-    private static final Logger log= LoggerFactory.getLogger(SaveLog.class);
-
-    public SaveLog(int sn, int cmd) {
+public class SaveLog2 extends DeviceUpdController {
+    private static final Logger log= LoggerFactory.getLogger(SaveLog2.class);
+    public String Log_PATH = "E:\\amp\\Apache24\\htdocs\\NBIOT\\devlog";
+    public SaveLog2(int sn, int cmd) {
         super(sn, cmd);
     }
 
     @Override
     public String DeviceUpdCtrlHandle(byte[] msg, int length) {
         String filename =null;
-        if(getCmd()==ElookCmdUrl.LOGS) {
-            filename = saveLogs(msg, length, getDevid());
+        if(getCmd()==ElookCmdUrl.LOGS2) {
+            filename = saveLogs2(msg, length, getDevid());
         }else{
 
         }
@@ -70,8 +70,8 @@ public class SaveLog extends DeviceUpdController {
 
     }
 
-    public String saveLogs(byte[] msg,int length,int devid) {
-        String path = new File("errlog").getAbsolutePath();
+    public String saveLogs2(byte[] msg,int length,int devid) {
+        String path = new File(Log_PATH).getAbsolutePath();
         path += File.separator+devid+File.separator+getPicDir();
         log.debug("path:"+path);
         return saveLogsPath(msg,length,devid,path);

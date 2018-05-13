@@ -60,7 +60,7 @@ public class SingleWinServer extends WinServerInterface{
                     ret = "OKE";
                 }
                 Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
                 String dateString = formatter.format(currentTime);
                 String delay_str = String.format("%02d", delay) + String.format("%04d", delay_sub);
                 ret += dateString + delay_str;
@@ -76,6 +76,9 @@ public class SingleWinServer extends WinServerInterface{
         }
         else if(cmd == ElookCmdUrl.LOGS||cmd == ElookCmdUrl.DATA_REPORT_ERROR_BUF_OLD){
             SaveLog sl = new SaveLog(sn,cmd);
+            ret = sl.DeviceUpdCtrlHandle(frame,frame.length);
+        }else if(cmd == ElookCmdUrl.LOGS2) {
+            SaveLog2 sl = new SaveLog2(sn,cmd);
             ret = sl.DeviceUpdCtrlHandle(frame,frame.length);
         }
         if(ret!=null&&!ret.isEmpty()){

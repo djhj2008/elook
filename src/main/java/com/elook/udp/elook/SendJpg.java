@@ -56,7 +56,7 @@ public class SendJpg extends DeviceUpdController {
         int id =dev.getDeviceAutoId();
         int rep_type = dev.getDeviceRepType();
         int tmp_value;
-
+        log.debug("upl_state:"+upl_state);
         if(type == 0 ||type == 1||type == 3){
             String filename = saveJpgPic(msg,length,devid);
             File fd = new File(filename);
@@ -100,8 +100,11 @@ public class SendJpg extends DeviceUpdController {
                         int led_type = res_led;
                         int led_lev = Integer.valueOf(strconf.substring(1, 3));
                         saveDevFull(id, batlev, EasyDeviceInfo.DEVSTATE_DEV_CONFIG_MIS, filename, tmp_value, led_type, led_lev);
-                        if(type==3){
-                            saveAccess(devid,tmp_value,filename);
+                    }
+                    if(type==3){
+                        saveAccess(devid,tmp_value,filename);
+                        if(upl_state==3){
+                            return getResultStrConfigLog(rep_type,delay,delay_sub,strconf);
                         }
                     }
                     return getResultStrConfig(rep_type,delay,delay_sub,strconf);
@@ -114,15 +117,15 @@ public class SendJpg extends DeviceUpdController {
             }
         }else if(type == 2){
             if(upl_state == 1){
-                upl_state = 0;
-                saveDevUplState(id,upl_state);
+                //upl_state = 0;
+                //saveDevUplState(id,upl_state);
             }
             String filename = saveNormalJpgPic(msg,length,devid);
             EasyAccess ea = findTopAccess(devid);
             if(ea !=null) {
                 saveAccessUrl(ea, filename);
             }
-            return getNormalResultStr(rep_type,delay,delay_sub);
+            return getResultStrLog(rep_type, upl_state, delay, delay_sub);
         }else{
             //Nothing TODO
         }

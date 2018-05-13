@@ -14,4 +14,5 @@ public class ElookCmdUrl {
     public final static int DATA_REPORT_BUF_OLD = 13;
     public final static int DATA_REPORT_ERROR_BUF_OLD = 14;
     public final static int SAVE_BMP = 15;
+    public final static int LOGS2 = 16;
 }

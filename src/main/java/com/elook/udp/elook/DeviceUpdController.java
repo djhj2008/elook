@@ -23,6 +23,8 @@ public abstract class DeviceUpdController {
     private int cmd;
     private String PASS_STR = "OK1";
     private String FAIL_STR = "OK2";
+    private String NPIC_STR = "OK2";
+    private String NLOG_STR = "OK3";
     private String PASS2_STR = "OK0";
     public String NORMAL_PATH = "E:\\amp\\Apache24\\htdocs\\NBIOT\\normalup";
     public String NORMAL_DIR = "normalup";
@@ -377,16 +379,33 @@ public abstract class DeviceUpdController {
     public String getNormalResultStr(int rep_type,int delay,int delay_sub){
         String ret = null;
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String dateString = formatter.format(currentTime);
         dateString += String.format("%02d", delay) + String.format("%04d", delay_sub);
         return "OK0"+rep_type+dateString;
     }
 
+    public String getResultStrLog(int rep_type,int upl_state,int delay,int delay_sub){
+        String ret = null;
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateString = formatter.format(currentTime);
+        String delay_str =  String.format("%02d", delay) + String.format("%04d", delay_sub);
+        log.debug(delay_str);
+        if(upl_state==0) {
+            ret = PASS2_STR+rep_type+dateString+delay_str;
+        }else if(upl_state==3) {
+            ret = NLOG_STR+rep_type+dateString+delay_str;
+        }else {
+            ret = PASS2_STR+rep_type+dateString+delay_str;
+        }
+        return ret;
+    }
+
     public String getResultStr(int rep_type,boolean state,int delay,int delay_sub){
         String ret = null;
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String dateString = formatter.format(currentTime);
         String delay_str =  String.format("%02d", delay) + String.format("%04d", delay_sub);
         log.debug(delay_str);
@@ -401,7 +420,7 @@ public abstract class DeviceUpdController {
     public String getResultStr(int rep_type,boolean state,int delay,int delay_sub,int led_type,int led_lev){
         String ret = null;
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String dateString = formatter.format(currentTime);
         dateString += String.format("%02d", delay) + String.format("%04d", delay_sub);
         if(state) {
@@ -412,12 +431,39 @@ public abstract class DeviceUpdController {
         return ret;
     }
 
+    public String getResultStrLog(int rep_type,int upl_state,int delay,int delay_sub,int led_type,int led_lev){
+        String ret = null;
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateString = formatter.format(currentTime);
+        dateString += String.format("%02d", delay) + String.format("%04d", delay_sub);
+        if(upl_state==0) {
+            ret = PASS_STR+rep_type+dateString+led_type+String.format("%02d", led_lev);
+        }else if(upl_state==1||upl_state==3) {
+            ret = NPIC_STR+rep_type+dateString+led_type+String.format("%02d", led_lev);
+        }else if(upl_state==2) {
+            ret = NLOG_STR+rep_type+dateString+led_type+String.format("%02d", led_lev);
+        }else {
+            ret = PASS_STR+rep_type+dateString+led_type+String.format("%02d", led_lev);
+        }
+        return ret;
+    }
+
     public String getResultStrConfig(int rep_type,int delay,int delay_sub,String conf){
         String ret = null;
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String dateString = formatter.format(currentTime);
         dateString += String.format("%02d", delay) + String.format("%04d", delay_sub);
         return PASS2_STR+rep_type+dateString+conf;
+    }
+
+    public String getResultStrConfigLog(int rep_type,int delay,int delay_sub,String conf){
+        String ret = null;
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateString = formatter.format(currentTime);
+        dateString += String.format("%02d", delay) + String.format("%04d", delay_sub);
+        return NLOG_STR+rep_type+dateString+conf;
     }
 }

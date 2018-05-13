@@ -70,11 +70,8 @@ public class DataReportBufO extends DeviceUpdController {
         saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
         saveAccess(devid,value);
 
-        if(upl == 0){
-            ret = getResultStr(rep_type,false,delay,delay_sub,led_type,led_lev);
-        }else{
-            ret = getResultStr(rep_type,false,delay,delay_sub,led_type,led_lev);;
-        }
+        ret = getResultStrLog(rep_type,upl,delay,delay_sub,led_type,led_lev);
+
         return ret;
     }
 }
