@@ -37,6 +37,9 @@ public abstract class DeviceUpdController {
     public final int BATLEVL_LEN = 1;
     public final int TEMP_START = BATLEVL_START+BATLEVL_LEN;
     public final int TEMP_LEN = 1;
+    public final int SIGNAL_START = TEMP_START+TEMP_LEN;
+    public final int SIGNAL_LEN = 1;
+    public final int HEAD_END = SIGNAL_START+SIGNAL_LEN;
     public final int NUM_COUNT = 5;
 
 
@@ -117,30 +120,34 @@ public abstract class DeviceUpdController {
         return tempFile.getPath();
     }
 
-    public void saveEasyDev(int id,int batlev,int state){
+    public void saveEasyDev(int id,int batlev,int state,int temp,int signal){
+        log.debug("saveEasyDev signal:"+signal);
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        easyDevRepository.updateStatusById(id,state,batlev);
+        easyDevRepository.updateStatusById(id,state,batlev,temp,signal);
     }
 
-    public void saveDevUplState(int id,int state){
+    public void saveDevUplState(int id,int state,int temp,int signal){
+        log.debug("saveDevUplState signal:"+signal);
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        easyDevRepository.updateUplById(id,state);
+        easyDevRepository.updateUplById(id,state,temp,signal);
     }
 
-    public void saveDevErrPic(int id,int batlev,int state,String path){
+    public void saveDevErrPic(int id,int batlev,int state,String path,int temp,int signal){
+        log.debug("saveDevErrPic signal:"+signal);
         int index = path.lastIndexOf(ERROR_DIR);
         path = path.substring(index,path.length());
         path = path.replace("\\","/");
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        easyDevRepository.updateErrPicById(id,state,batlev,path);
+        easyDevRepository.updateErrPicById(id,state,batlev,path,temp,signal);
     }
 
-    public void saveDevFull(int id,int batlev,int state,String path,int tmp_value,int led_type,int led_lev){
+    public void saveDevFull(int id,int batlev,int state,String path,int tmp_value,int led_type,int led_lev,int temp,int signal){
+        log.debug("saveDevFull signal:"+signal);
         int index = path.lastIndexOf(NORMAL_DIR);
         path = path.substring(index,path.length());
         path = path.replace("\\","/");
         EasyDevRepository easyDevRepository = (EasyDevRepository) StartupEvent.getBean(EasyDevRepository.class);
-        easyDevRepository.updateDevFull(id,state,batlev,path,tmp_value,led_type,led_lev);
+        easyDevRepository.updateDevFull(id,state,batlev,path,tmp_value,led_type,led_lev,temp,signal);
     }
 
     public void saveAccess(int devid,int value){
@@ -353,6 +360,11 @@ public abstract class DeviceUpdController {
     public int parseTemp(byte[] msg){
         log.debug("temp:"+msg[TEMP_START]);
         return msg[TEMP_START];
+    }
+
+    public int parseSignal(byte[] msg){
+        log.debug("signal:"+msg[SIGNAL_START]);
+        return msg[SIGNAL_START];
     }
 
     public int parseCharValue(int num){

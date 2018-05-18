@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class DataReportBufO extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(DataReportBufO.class);
-    private final int RADIUS_START = TEMP_START+TEMP_LEN;
+    private final int RADIUS_START = HEAD_END;
     private final int RADIUS_LEN  = 1;
     private final int WIDTH_START = RADIUS_START+RADIUS_LEN;
     private final int WIDTH_LEN   = 1;
@@ -32,6 +32,7 @@ public class DataReportBufO extends DeviceUpdController {
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
         int temp = parseTemp(msg);
+        int signal = parseSignal(msg);
 
         int radius = msg[RADIUS_START]&0xff;
         int width = msg[WIDTH_START]&0xff;
@@ -67,7 +68,7 @@ public class DataReportBufO extends DeviceUpdController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String dateString = formatter.format(currentTime);
 
-        saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
+        saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS,temp,signal);
         saveAccess(devid,value);
 
         ret = getResultStrLog(rep_type,upl,delay,delay_sub,led_type,led_lev);

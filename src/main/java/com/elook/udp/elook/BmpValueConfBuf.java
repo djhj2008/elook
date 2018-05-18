@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class BmpValueConfBuf extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(BmpValueConfBuf.class);
-    private final int BMP_START = TEMP_START+TEMP_LEN;
+    private final int BMP_START = HEAD_END;
     private final int BMP_COUNT = NUM_COUNT;
     private final int SMALL_BMP_WIDTH = 12;
     private final int SMALL_BMP_HEIGHT = 18;
@@ -24,6 +24,7 @@ public class BmpValueConfBuf extends DeviceUpdController {
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
         int temp = parseTemp(msg);
+        int signal = parseSignal(msg);
 
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){
@@ -55,7 +56,7 @@ public class BmpValueConfBuf extends DeviceUpdController {
             state = EasyDeviceInfo.DEVSTATE_CONFIRM_FAIL;
             ret = getResultStr(rep_type,false,delay,delay_sub);
         }
-        saveEasyDev(id,batlev,state);
+        saveEasyDev(id,batlev,state,temp,signal);
         return ret;
     }
 

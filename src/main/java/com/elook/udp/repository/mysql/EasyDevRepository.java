@@ -23,22 +23,28 @@ public interface EasyDevRepository extends JpaRepository<EasyDevice,Integer> {
     @Query(value = "update easy_device ed set " +
             "ed.device_dev_state=?2 " +
             ",ed.device_bettery_lev=?3 " +
+            " ,ed.device_mtemp =?4 "+
+            " ,ed.device_signal =?5 "+
             "where ed.device_auto_id = ?1",nativeQuery = true)
-    int updateStatusById(int auto_id,int state,int bat_lev);
+    int updateStatusById(int auto_id,int state,int bat_lev,int temp,int signal);
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update easy_device ed set" +
             " ed.device_dev_state=?2" +
             " ,ed.device_bettery_lev=?3" +
             " ,ed.device_dev_url_errpic=?4 " +
+            " ,ed.device_mtemp =?5 "+
+            " ,ed.device_signal =?6 "+
             "where ed.device_auto_id = ?1",nativeQuery = true)
-    int updateErrPicById(int auto_id,int state,int bat_lev,String path);
+    int updateErrPicById(int auto_id,int state,int bat_lev,String path,int temp,int signal);
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update easy_device ed set " +
             "ed.device_upl_state=?2 " +
+            " ,ed.device_mtemp =?3 "+
+            " ,ed.device_signal =?4 "+
             "where ed.device_auto_id=?1",nativeQuery = true)
-    int updateUplById(int auto_id,int upl_state);
+    int updateUplById(int auto_id,int upl_state,int temp,int signal);
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update easy_device ed set " +
@@ -48,6 +54,8 @@ public interface EasyDevRepository extends JpaRepository<EasyDevice,Integer> {
             " ,ed.device_tmp_value=?5 "+
             " ,ed.device_led_type=?6 "+
             " ,ed.device_led_level =?7 "+
+            " ,ed.device_mtemp =?8 "+
+            " ,ed.device_signal =?9 "+
             "where ed.device_auto_id=?1",nativeQuery = true)
-    int updateDevFull(int auto_id,int bat_lev,int state,String path,int tmp_value,int led_type,int led_lev);
+    int updateDevFull(int auto_id,int bat_lev,int state,String path,int tmp_value,int led_type,int led_lev,int temp,int signal);
 }

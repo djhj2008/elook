@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class DataReport extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(DataReport.class);
-    private int COUNT_START = TEMP_START+TEMP_LEN;
+    private int COUNT_START = HEAD_END;
     private int COUNT_LEN = 1;
     private int VALUE_START = COUNT_START+COUNT_LEN;
     private int VALUE_LEN = 4;
@@ -24,9 +24,8 @@ public class DataReport extends DeviceUpdController {
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
         int temp = parseTemp(msg);
-        for(int i=0;i<length;i++){
-            log.debug(i+":0x" + Integer.toHexString(msg[i]));
-        }
+        int signal = parseSignal(msg);
+
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){
             return null;
@@ -55,7 +54,7 @@ public class DataReport extends DeviceUpdController {
             saveAccess(devid,value,time);
         }
 
-        saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
+        saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS,temp,signal);
 
         ret = getResultStrLog(rep_type,upl,delay,delay_sub,led_type,led_lev);
 

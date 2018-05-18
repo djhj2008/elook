@@ -58,6 +58,12 @@ public class EasyDevice {
     @Column(name = "device_dev_url_errpic")
     private String deviceDevUrlErrpic;
 
+    @Column(name = "device_mtemp")
+    private int deviceMtemp;
+
+    @Column(name = "device_signal")
+    private int deviceSignal;
+
     @Id
     @GeneratedValue
     public int getDeviceAutoId() {
@@ -179,6 +185,23 @@ public class EasyDevice {
     public void setDeviceRepType(int deviceRepType) {
         this.deviceRepType = deviceRepType;
     }
+
+    public int getDeviceMtemp() {
+        return deviceMtemp;
+    }
+
+    public void setDeviceMtemp(int deviceMtemp) {
+        this.deviceMtemp = deviceMtemp;
+    }
+
+    public int getDeviceSignal() {
+        return deviceSignal;
+    }
+
+    public void setDeviceSignal(int deviceSignal) {
+        this.deviceSignal = deviceSignal;
+    }
+
     public String toString()
     {
         return "id:"+deviceAutoId+" devid:"+deviceDeviceId+" state:"+deviceDevState+" tmp_value:"+deviceTmpValue;

@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class DataReportBuf extends DeviceUpdController {
     private static final Logger log= LoggerFactory.getLogger(DataReportBuf.class);
-    private final int BMP_START = TEMP_START+TEMP_LEN;
+    private final int BMP_START = HEAD_END;
     private final int BMP_COUNT = 5;
     private final int SMALL_BMP_WIDTH = 12;
     private final int SMALL_BMP_HEIGHT = 18;
@@ -27,6 +27,7 @@ public class DataReportBuf extends DeviceUpdController {
         int sn_c = parseDevId(msg);
         int batlev = parseBatLev(msg);
         int temp = parseTemp(msg);
+        int signal = parseSignal(msg);
 
         EasyDevice dev = findEasyDev(devid);
         if(dev == null){
@@ -55,7 +56,7 @@ public class DataReportBuf extends DeviceUpdController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String dateString = formatter.format(currentTime);
 
-        saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS);
+        saveEasyDev(id,batlev, EasyDeviceInfo.DEVSTATE_CONFIG_PASS,temp,signal);
         saveAccess(devid,value);
 
         ret = getResultStrLog(rep_type,upl,delay,delay_sub,led_type,led_lev);

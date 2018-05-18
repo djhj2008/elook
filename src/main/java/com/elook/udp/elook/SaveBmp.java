@@ -3,7 +3,7 @@ package com.elook.udp.elook;
 import com.elook.udp.mod.EasyDevice;
 
 public class SaveBmp extends DeviceUpdController {
-    private final int WIDTH_START = TEMP_START+TEMP_LEN;
+    private final int WIDTH_START = HEAD_END;
     private final int WIDTH_LEN   = 2;
     private final int HEIGHT_START = WIDTH_START+WIDTH_LEN;
     private final int HEIGHT_LEN  = 2;
@@ -20,6 +20,7 @@ public class SaveBmp extends DeviceUpdController {
         int batlev = parseBatLev(msg);
         int temp = parseTemp(msg);
         int devid = getDevid();
+        int signal = parseSignal(msg);
 
         int width = Byte2Short(msg,WIDTH_START);
         int height = Byte2Short(msg,HEIGHT_START);
